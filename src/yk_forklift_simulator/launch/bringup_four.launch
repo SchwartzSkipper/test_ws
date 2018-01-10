@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find yk_forklift_simulator)/launch/yk_stage_four.launch"/>
+    <group ns="/robot_0">
+        <include file="$(find yk_forklift_simulator)/launch/map_server.launch"/>
+        <include file="$(find yk_forklift_simulator)/launch/amcl_single.launch">
+            <arg name="scan_topic"     value="/robot_0/base_scan"/>
+            <arg name="base_frame_id"   value="/robot_0/base_link"/>
+            <arg name="global_frame_id" value="/map"/>
+            <arg name="odom_frame_id"   value="/robot_0/odom"/>
+            <arg name="initial_pose_x" value="-2"/>
+            <arg name="initial_pose_y" value="9.0"/>
+            <arg name="initial_pose_a" value="-1.57"/>
+        </include>
+
+        <include file="$(find yk_forklift_simulator)/launch/move_base_single.launch">
+            <arg name="map_topic" value="/robot_0/map"/>
+            <arg name="global_costmap_global_frame" value="/map"/>
+            <arg name="local_costmap_global_frame" value="/robot_0/odom"/>
+            <arg name="global_costmap_robot_base_frame" value="/robot_0/base_footprint"/>
+            <arg name="local_costmap_robot_base_frame" value="/robot_0/base_footprint"/>
+        </include> 
+        <include file="$(find yocs_waypoints_navi)/launch/waypoints_navi.launch">
+            <arg name="waypoints_topic" value="/waypoints"/>
+            <arg name="trajectories_topic" value="/trajectories"/>
+        </include>
+    </group>
+
+    <group ns="/robot_1">
+        <include file="$(find yk_forklift_simulator)/launch/map_server.launch"/>
+        <include file="$(find yk_forklift_simulator)/launch/amcl_single.launch">
+            <arg name="scan_topic"     value="/robot_1/base_scan"/>
+            <arg name="base_frame_id"   value="/robot_1/base_link"/>
+            <arg name="global_frame_id" value="/map"/>
+            <arg name="odom_frame_id"   value="/robot_1/odom"/>
+            <arg name="initial_pose_x" value="-2"/>
+            <arg name="initial_pose_y" value="-3.0"/>
+            <arg name="initial_pose_a" value="-1.57"/>
+        </include>
+
+        <include file="$(find yk_forklift_simulator)/launch/move_base_single.launch">
+            <arg name="map_topic" value="/robot_0/map"/>
+            <arg name="global_costmap_global_frame" value="/map"/>
+            <arg name="local_costmap_global_frame" value="/robot_1/odom"/>
+            <arg name="global_costmap_robot_base_frame" value="/robot_1/base_footprint"/>
+            <arg name="local_costmap_robot_base_frame" value="/robot_1/base_footprint"/>
+        </include>
+        <include file="$(find yocs_waypoints_navi)/launch/waypoints_navi.launch">
+            <arg name="waypoints_topic" value="/waypoints"/>
+            <arg name="trajectories_topic" value="/trajectories"/>
+        </include>
+    </group>
+
+    <group ns="/robot_2">
+        <include file="$(find yk_forklift_simulator)/launch/map_server.launch"/>
+        <include file="$(find yk_forklift_simulator)/launch/amcl_single.launch">
+            <arg name="scan_topic"     value="/robot_2/base_scan"/>
+            <arg name="base_frame_id"   value="/robot_2/base_link"/>
+            <arg name="global_frame_id" value="/map"/>
+            <arg name="odom_frame_id"   value="/robot_2/odom"/>
+            <arg name="initial_pose_x" value="48.0"/>
+            <arg name="initial_pose_y" value="5.0"/>
+            <arg name="initial_pose_a" value="1.57"/>
+        </include>
+
+        <include file="$(find yk_forklift_simulator)/launch/move_base_single.launch">
+            <arg name="map_topic" value="/robot_2/map"/>
+            <arg name="global_costmap_global_frame" value="/map"/>
+            <arg name="local_costmap_global_frame" value="/robot_2/odom"/>
+            <arg name="global_costmap_robot_base_frame" value="/robot_2/base_footprint"/>
+            <arg name="local_costmap_robot_base_frame" value="/robot_2/base_footprint"/>
+        </include> 
+        <include file="$(find yocs_waypoints_navi)/launch/waypoints_navi.launch">
+            <arg name="waypoints_topic" value="/waypoints"/>
+            <arg name="trajectories_topic" value="/trajectories"/>
+        </include>
+    </group>
+
+    <group ns="/robot_3">
+        <include file="$(find yk_forklift_simulator)/launch/map_server.launch"/>
+        <include file="$(find yk_forklift_simulator)/launch/amcl_single.launch">
+            <arg name="scan_topic"     value="/robot_3/base_scan"/>
+            <arg name="base_frame_id"   value="/robot_3/base_link"/>
+            <arg name="global_frame_id" value="/map"/>
+            <arg name="odom_frame_id"   value="/robot_3/odom"/>
+            <arg name="initial_pose_x" value="52.0"/>
+            <arg name="initial_pose_y" value="5.0"/>
+            <arg name="initial_pose_a" value="1.57"/>
+        </include>
+
+        <include file="$(find yk_forklift_simulator)/launch/move_base_single.launch">
+            <arg name="map_topic" value="/robot_3/map"/>
+            <arg name="global_costmap_global_frame" value="/map"/>
+            <arg name="local_costmap_global_frame" value="/robot_3/odom"/>
+            <arg name="global_costmap_robot_base_frame" value="/robot_3/base_footprint"/>
+            <arg name="local_costmap_robot_base_frame" value="/robot_3/base_footprint"/>
+        </include> 
+        <include file="$(find yocs_waypoints_navi)/launch/waypoints_navi.launch">
+            <arg name="waypoints_topic" value="/waypoints"/>
+            <arg name="trajectories_topic" value="/trajectories"/>
+        </include>
+    </group>
+
+    <include file="$(find yocs_waypoint_provider)/launch/yk_provider.launch"/>
+    <!--<include file="$(find yk_forklift_simulator)/launch/rviz.launch"/>-->
+</launch>

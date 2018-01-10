@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+	<node name="rviz" pkg="rviz" type="rviz" output="screen">
+		<remap from="/move_base_simple/goal" to="/robot_1/move_base_simple/goal"/>
+	</node>
+</launch>

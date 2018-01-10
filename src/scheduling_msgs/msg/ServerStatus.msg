@@ -1,0 +1,2 @@
+bool isReady
+string text

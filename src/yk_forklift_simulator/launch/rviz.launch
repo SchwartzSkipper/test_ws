@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="ns" default=""/>
+	<node name="rviz" pkg="rviz" type="rviz" output="screen">
+		<remap from="initialpose" to="$(arg ns)/initialpose"/>
+		<remap from="move_base_simple/goal" to="$(arg ns)/move_base_simple/goal"/>
+	</node>
+</launch>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+<!--	<group ns="gb">-->
+		<arg name="filename" default="$(find teb_locals)/path/path00.txt"/>
+		<arg name="pathID" default="1"/>
+		<arg name="pub_topic" default="specified_path"/>
+		<arg name="path_reverse" default="true"/>
+    	<node name="path_player_node" pkg="path_recorder" type="path_player_node" output="screen">
+    		<param name="pathfilename" value="$(arg filename)"/>
+    		<param name="pathID" value="$(arg pathID)"/>
+    		<param name="path_topicname" value="$(arg pub_topic)"/>
+    		<param name="path_reversed" value="$(arg path_reverse)"/>
+    	</node>
+<!--	</group>-->
+</launch>

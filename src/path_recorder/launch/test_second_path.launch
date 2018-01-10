@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+<!--	<group ns="gb">-->
+		<arg name="filename" default="/home/hitrobot/catkin_ws/path02.txt"/>
+		<arg name="pathID" default="2"/>
+		<arg name="pub_topic" default="specified_path2"/>
+    	<node name="path_player_node2" pkg="path_recorder" type="path_player_node" output="screen">
+    		<param name="pathfilename" value="$(arg filename)"/>
+    		<param name="pathID" value="$(arg pathID)"/>
+    		<param name="path_topicname" value="$(arg pub_topic)"/>
+    	</node>
+<!--	</group>-->
+</launch>

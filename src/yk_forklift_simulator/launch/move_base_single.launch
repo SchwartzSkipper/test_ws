@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="base_local_planner" default="global_planner/MixedPlanner"/>
+    <arg name="scan_topic" default="base_scan"/>
+    <arg name="map_topic" default="map"/>
+    <!--<arg name="fixed_planner_subscribe_path_topic" default="specified_path"/>-->
+
+    <arg name="global_costmap_global_frame" default="map"/>
+    <arg name="local_costmap_global_frame" default="odom"/>
+    <arg name="global_costmap_robot_base_frame" default="base_footprint"/>
+    <arg name="local_costmap_robot_base_frame" default="base_footprint"/>
+    <!--<arg name="local_costmap_robot_base_frame" default="base_footprint"/>-->
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam>
+            base_global_planner: "global_planner/MixedPlanner" <!--"navfn/NavfnROS"--> <!--"global_planner/FixedGlobalPlanner"--> <!--"global_planner/MixedPlanner"-->
+            base_local_planner: "dwa_local_planner/DWAPlannerROS"
+            recovery_behaviors:
+              - name: 'conservative_reset'
+                type: 'clear_costmap_recovery/ClearCostmapRecovery'
+              - name: 'aggressive_reset'
+                type: 'clear_costmap_recovery/ClearCostmapRecovery'
+            conservative_reset:
+                reset_distance: 3.0
+                layer_names: [obstacle_layer]
+            aggressive_reset:
+                reset_distance: 0.0
+                layer_names: [obstacle_layer]
+            controller_frequency: 5.0
+            planner_patience: 5.0
+            controller_patience: 15.0
+            oscillation_timeout: 10.0
+            planner_frequency: 0.0
+            max_planning_retries: 0
+            global_costmap:
+                global_frame: map
+                robot_base_frame: base_footprint
+                footprint: [[1.95, -0.44], [1.95, 0.44], [-0.20, 0.44], [-0.20, -0.44]]
+                update_frequency: 2.0
+                publish_frequency: 0.5 #0.0
+                transform_tolerance: 1.2 #0.5
+                resolution: 0.05
+                plugins:
+                  - name: static_layer
+                    type: "costmap_2d::StaticLayer"
+                  - name: obstacle_layer
+                    type: "costmap_2d::ObstacleLayer"
+                  - name: inflation_layer
+                    type: "costmap_2d::InflationLayer"
+                static_layer:
+                    enabled: true
+                    map_topic: /map
+                obstacle_layer:
+                    observation_sources: base_scan
+                    base_scan:
+                        topic: /base_scan
+                        expected_update_rate: 5.0
+                        data_type: LaserScan
+                        clearing: true
+                        max_obstacle_height: 3.0
+                        min_obstacle_height: -1.0
+                        inf_is_valid: true
+                    track_unknown_space: true
+                    footprint_clearing_enabled: false
+                    z_voxels: 8
+                inflation_layer:
+                    inflation_radius: 1.25
+                footprint_topic: footprint_setup
+            local_costmap:
+                global_frame: odom
+                robot_base_frame: base_footprint
+                footprint: [[1.95, -0.44], [1.95, 0.44], [-0.20, 0.44], [-0.20, -0.44]]
+                transform_tolerance: 0.8 #0.5
+                update_frequency: 5.0
+                publish_frequency: 2.0 #0.0
+                static_map: false
+                rolling_window: true
+                width: 8.0
+                height: 8.0
+                resolution: 0.05 #0.025
+                plugins:
+                  - name: obstacle_layer
+                    type: "costmap_2d::ObstacleLayer"
+                  - name: inflation_layer
+                    type: "costmap_2d::InflationLayer"
+                obstacle_layer:
+                    observation_sources: base_scan
+                    base_scan:
+                        topic: /base_scan
+                        expected_update_rate: 5.0
+                        data_type: LaserScan
+                        clearing: true
+                        max_obstacle_height: 3.0
+                        min_obstacle_height: -1.0
+                        inf_is_valid: true
+                    track_unknown_space: true
+                    footprint_clearing_enabled: false
+                    z_voxels: 8
+                inflation_layer:
+                    inflation_radius: 1.25
+                footprint_topic: footprint_setup
+            GlobalPlanner:
+                allow_unknown: false
+            NavfnROS:
+                allow_unknown: false
+            FixedGlobalPlanner:
+                allow_unknown: false
+                subscribe_path_topic: specified_path
+                endpoint_tolerance: 2.0
+                retrace_path: true
+                use_goal_direction: false
+            TrajectoryPlannerROS:
+                acc_lim_x: 0.5
+                acc_lim_y: 0.0
+                acc_lim_theta: 3.2
+                min_vel_x: 0.1
+                max_vel_x: 2.0
+                min_in_place_vel_theta: 0.2
+                escape_vel: -0.1
+                holonomic_robot: false
+                yaw_goal_tolerance: 0.025
+                xy_goal_tolerance: 0.05
+                latch_xy_goal_tolerance: true
+                meter_scoring: true
+                occdist_scale: 0.5 #0.01
+                heading_scoring: true
+                dwa: true
+                global_frame_id: odom
+            MixedPlanner:
+                fixed_planner:
+                    endpoint_tolerance: 1.0
+            DWAPlannerROS:
+                acc_lim_x: 0.5
+                acc_lim_y: 0.0
+                acc_lim_th: 3.2
+                min_trans_vel: 0.05
+                max_trans_vel: 2.0
+                min_vel_x: -2.0
+                max_vel_x: 2.0 #0.55
+                max_vel_y: 0.0
+                min_vel_y: 0.0
+                min_rot_vel: 0.05
+                yaw_goal_tolerance: 1.5 #0.025
+                xy_goal_tolerance: 0.5 #0.10 #0.05
+                latch_xy_goal_tolerance: true
+                occdist_scale: 0.0
+                path_distance_bias: 32.0 #96.0
+                vx_samples: 7
+                vy_samples: 1
+            TebLocalPlannerROS:
+                acc_lim_x: 0.5
+                acc_lim_theta: 3.2
+                max_vel_x_backwards: 0.3 #0.2
+                min_turning_radius: 0.001
+                wheelbase: 1.555
+                footprint_model:
+                    type: "polygon"
+                xy_goal_tolerance: 0.5 #0.2
+                yaw_goal_tolerance: 0.2 #0.2
+                free_goal_vel: false
+                viapoints_all_candidates: false #true
+                odom_topic: /odometry/filtered
+                map_frame: /map
+        </rosparam>
+        <!--YAML cannot append namespace autonomously, use XML instead-->
+        <param name="base_global_planner" value="$(arg base_local_planner)"/>
+        <param name="global_costmap/global_frame" value="$(arg global_costmap_global_frame)"/>
+        <param name="local_costmap/global_frame" value="$(arg local_costmap_global_frame)"/>
+        <param name="global_costmap/robot_base_frame" value="$(arg global_costmap_robot_base_frame)"/>
+        <param name="local_costmap/robot_base_frame" value="$(arg local_costmap_robot_base_frame)"/>
+        <!--<param name="FixedGlobalPlanner/subscribe_path_topic" value="$(arg fixed_planner_subscribe_path_topic)"/>-->
+            
+        <param name="global_costmap/obstacle_layer/base_scan/topic" value="$(arg scan_topic)"/>
+        <param name="local_costmap/obstacle_layer/base_scan/topic" value="$(arg scan_topic)"/>
+        <param name="global_costmap/static_layer/map_topic" value="$(arg map_topic)"/>
+    </node>
+</launch>

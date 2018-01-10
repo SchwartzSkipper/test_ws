@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+<group ns="/robot_0">
+	<include file="$(find yocs_waypoints_navi)/launch/waypoints_navi.launch"/>
+</group>
+</launch>

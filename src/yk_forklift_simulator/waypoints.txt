@@ -1,0 +1,2818 @@
+waypoints: 
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"frame_id":"map","home":"充电位","type":"initial_pose"}
+
+    name: init
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"5","iter_span":"1.28","type":"workstation"}
+
+    name: 充电位_AGV_1
+    pose: 
+      position: 
+        x: 5.476
+        y: -3.2
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.28","type":"workstation"}
+
+    name: 充电位_AGV_2
+    pose: 
+      position: 
+        x: 4.196
+        y: -3.2
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.28","type":"workstation"}
+
+    name: 充电位_AGV_3
+    pose: 
+      position: 
+        x: 2.916
+        y: -3.2
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.28","type":"workstation"}
+
+    name: 充电位_AGV_4
+    pose: 
+      position: 
+        x: 1.636
+        y: -3.2
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.28","type":"workstation"}
+
+    name: 充电位_AGV_5
+    pose: 
+      position: 
+        x: 0.356
+        y: -3.2
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","type":"workstation"}
+
+    name: 切管机
+    pose: 
+      position: 
+        x: -34.35
+        y: -2.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"2.4","type":"workstation"}
+
+    name: 冲压机1_1
+    pose: 
+      position: 
+        x: 15.2
+        y: -1.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"2.4","type":"workstation"}
+
+    name: 冲压机1_2
+    pose: 
+      position: 
+        x: 12.8
+        y: -1.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"1.87","type":"workstation"}
+
+    name: 冲压机2_1
+    pose: 
+      position: 
+        x: 11.16
+        y: -1.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.87","type":"workstation"}
+
+    name: 冲压机2_2
+    pose: 
+      position: 
+        x: 9.29
+        y: -1.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"8","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_1
+    pose: 
+      position: 
+        x: 33.72
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_2
+    pose: 
+      position: 
+        x: 32.04
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_3
+    pose: 
+      position: 
+        x: 30.36
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_4
+    pose: 
+      position: 
+        x: 28.68
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_5
+    pose: 
+      position: 
+        x: 27.0
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_6
+    pose: 
+      position: 
+        x: 25.32
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_7
+    pose: 
+      position: 
+        x: 23.64
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.68","type":"workstation"}
+
+    name: 中间缓存区_A_8
+    pose: 
+      position: 
+        x: 21.96
+        y: -1.89
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"8","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_1
+    pose: 
+      position: 
+        x: 33.72
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_2
+    pose: 
+      position: 
+        x: 35.4
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_3
+    pose: 
+      position: 
+        x: 37.08
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_4
+    pose: 
+      position: 
+        x: 38.76
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_5
+    pose: 
+      position: 
+        x: 40.44
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_6
+    pose: 
+      position: 
+        x: 42.12
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_7
+    pose: 
+      position: 
+        x: 43.8
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.68","type":"workstation"}
+
+    name: 中间缓存区_B_8
+    pose: 
+      position: 
+        x: 45.48
+        y: -7.34
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"-1.85","type":"workstation"}
+
+    name: 切割机1_1
+    pose: 
+      position: 
+        x: 42.65
+        y: 4.5
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.85","type":"workstation"}
+
+    name: 切割机1_2
+    pose: 
+      position: 
+        x: 40.8
+        y: 4.5
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"-1.4","type":"workstation"}
+
+    name: 切割机2_1
+    pose: 
+      position: 
+        x: 20.2
+        y: 4.5
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.4","type":"workstation"}
+
+    name: 切割机2_2
+    pose: 
+      position: 
+        x: 18.8
+        y: 4.5
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"2.2","type":"workstation"}
+
+    name: 折弯机1_1
+    pose: 
+      position: 
+        x: 61.5847
+        y: -2.65
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"2.2","type":"workstation"}
+
+    name: 折弯机1_2
+    pose: 
+      position: 
+        x: 59.3847
+        y: -2.65
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"2.67","type":"workstation"}
+
+    name: 折弯机2_1
+    pose: 
+      position: 
+        x: 54.95
+        y: -2.5
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"2.67","type":"workstation"}
+
+    name: 折弯机2_2
+    pose: 
+      position: 
+        x: 52.28
+        y: -2.5
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"1.72","type":"workstation"}
+
+    name: 折弯机3_1
+    pose: 
+      position: 
+        x: 47.65
+        y: -2.8
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.72","type":"workstation"}
+
+    name: 折弯机3_2
+    pose: 
+      position: 
+        x: 45.93
+        y: -2.8
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"2","iter_span":"1.6","type":"workstation"}
+
+    name: 折弯机4_1
+    pose: 
+      position: 
+        x: 41.44
+        y: -2.8
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.6","type":"workstation"}
+
+    name: 折弯机4_2
+    pose: 
+      position: 
+        x: 39.84
+        y: -2.8
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"19","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_1
+    pose: 
+      position: 
+        x: 65.5
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_2
+    pose: 
+      position: 
+        x: 64.05
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_3
+    pose: 
+      position: 
+        x: 62.6
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_4
+    pose: 
+      position: 
+        x: 61.15
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_5
+    pose: 
+      position: 
+        x: 59.7
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_6
+    pose: 
+      position: 
+        x: 58.25
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_7
+    pose: 
+      position: 
+        x: 56.8
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_8
+    pose: 
+      position: 
+        x: 55.35
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_9
+    pose: 
+      position: 
+        x: 53.9
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_10
+    pose: 
+      position: 
+        x: 52.45
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_11
+    pose: 
+      position: 
+        x: 51.0
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_12
+    pose: 
+      position: 
+        x: 49.55
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_13
+    pose: 
+      position: 
+        x: 48.1
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_14
+    pose: 
+      position: 
+        x: 46.65
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_15
+    pose: 
+      position: 
+        x: 45.2
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_16
+    pose: 
+      position: 
+        x: 43.75
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_17
+    pose: 
+      position: 
+        x: 42.3
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_18
+    pose: 
+      position: 
+        x: 40.85
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.45","type":"workstation"}
+
+    name: 最终缓存区_A_19
+    pose: 
+      position: 
+        x: 39.4
+        y: -11.9
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"19","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_1
+    pose: 
+      position: 
+        x: 65.5
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_2
+    pose: 
+      position: 
+        x: 64.05
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_3
+    pose: 
+      position: 
+        x: 62.6
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_4
+    pose: 
+      position: 
+        x: 61.15
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_5
+    pose: 
+      position: 
+        x: 59.7
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_6
+    pose: 
+      position: 
+        x: 58.25
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_7
+    pose: 
+      position: 
+        x: 56.8
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_8
+    pose: 
+      position: 
+        x: 55.35
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_9
+    pose: 
+      position: 
+        x: 53.9
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_10
+    pose: 
+      position: 
+        x: 52.45
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_11
+    pose: 
+      position: 
+        x: 51.0
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_12
+    pose: 
+      position: 
+        x: 49.55
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_13
+    pose: 
+      position: 
+        x: 48.1
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_14
+    pose: 
+      position: 
+        x: 46.65
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_15
+    pose: 
+      position: 
+        x: 45.2
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_16
+    pose: 
+      position: 
+        x: 43.75
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_17
+    pose: 
+      position: 
+        x: 42.3
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_18
+    pose: 
+      position: 
+        x: 40.85
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.45","type":"workstation"}
+
+    name: 最终缓存区_B_19
+    pose: 
+      position: 
+        x: 39.4
+        y: -19.45
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"7","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_1
+    pose: 
+      position: 
+        x: 61.25
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_2
+    pose: 
+      position: 
+        x: 59.67
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_3
+    pose: 
+      position: 
+        x: 58.09
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_4
+    pose: 
+      position: 
+        x: 56.51
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_5
+    pose: 
+      position: 
+        x: 54.93
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_6
+    pose: 
+      position: 
+        x: 53.35
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线1_A_7
+    pose: 
+      position: 
+        x: 51.77
+        y: -26.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"7","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_1
+    pose: 
+      position: 
+        x: 61.25
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_2
+    pose: 
+      position: 
+        x: 59.67
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_3
+    pose: 
+      position: 
+        x: 58.09
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_4
+    pose: 
+      position: 
+        x: 56.51
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_5
+    pose: 
+      position: 
+        x: 54.93
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_6
+    pose: 
+      position: 
+        x: 53.35
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线1_B_7
+    pose: 
+      position: 
+        x: 51.77
+        y: -31.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"7","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_1
+    pose: 
+      position: 
+        x: 61.25
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_2
+    pose: 
+      position: 
+        x: 59.67
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_3
+    pose: 
+      position: 
+        x: 58.09
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_4
+    pose: 
+      position: 
+        x: 56.51
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_5
+    pose: 
+      position: 
+        x: 54.93
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_6
+    pose: 
+      position: 
+        x: 53.35
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"-1.58","type":"workstation"}
+
+    name: 焊接线2_A_7
+    pose: 
+      position: 
+        x: 51.77
+        y: -36.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"7","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_1
+    pose: 
+      position: 
+        x: 61.25
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_2
+    pose: 
+      position: 
+        x: 59.67
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_3
+    pose: 
+      position: 
+        x: 58.09
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_4
+    pose: 
+      position: 
+        x: 56.51
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_5
+    pose: 
+      position: 
+        x: 54.93
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_6
+    pose: 
+      position: 
+        x: 53.35
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"call":"line_center_cb","frame_id":"map","iter":"0","iter_span":"1.58","type":"workstation"}
+
+    name: 焊接线2_B_7
+    pose: 
+      position: 
+        x: 51.77
+        y: -41.17
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"goal_timeout":"3","type":"timer"}
+
+    name: wait3s
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"goal_timeout":"4","type":"timer"}
+
+    name: wait4s
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"goal_timeout":"5","type":"timer"}
+
+    name: wait5s
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"0","failure_mode":"NONE","goal_timeout":"3","type":"shell"}
+
+    name: lift_hang
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"0","failure_mode":"NONE","goal_timeout":"3","type":"shell"}
+
+    name: lift_up
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"0","failure_mode":"NONE","goal_timeout":"3","type":"shell"}
+
+    name: lift_down
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"frame_id":"map","mark":"true","type":"tail"}
+
+    name: tail_up
+    pose: 
+      position: 
+        x: -0.05
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 1.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"frame_id":"map","mark":"true","type":"tail"}
+
+    name: tail_down
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 1.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"-2.0","frame_id":"map","mark":"true","type":"goal"}
+
+    name: line_center
+    pose: 
+      position: 
+        x: 3.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 1.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"-1.5","frame_id":"map","mark":"true","type":"goal"}
+
+    name: line_left
+    pose: 
+      position: 
+        x: 3.0
+        y: 2.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"-1.5","frame_id":"map","mark":"true","type":"goal"}
+
+    name: line_right
+    pose: 
+      position: 
+        x: 3.0
+        y: 2.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: -0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"close_enough":"-1.5","frame_id":"map","line":"true","mark":"true","type":"goal"}
+
+    name: line_auto
+    pose: 
+      position: 
+        x: 3.0
+        y: 2.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.7071
+        w: 0.7071
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"lift_up_cb","type":"call"}
+
+    name: lift_up_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"lift_down_cb","type":"call"}
+
+    name: lift_down_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"tail_up_cb","type":"call"}
+
+    name: tail_up_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"tail_down_cb","type":"call"}
+
+    name: tail_down_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_left_up_cb","type":"call"}
+
+    name: line_left_up_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_left_down_cb","type":"call"}
+
+    name: line_left_down_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_right_up_cb","type":"call"}
+
+    name: line_right_up_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_right_down_cb","type":"call"}
+
+    name: line_right_down_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_auto_dock_cb","type":"call"}
+
+    name: line_auto_dock_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_auto_up_cb","type":"call"}
+
+    name: line_auto_up_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs:         0
+      frame_id: {"failure_mode":"line_auto_down_cb","type":"call"}
+
+    name: line_auto_down_wp
+    pose: 
+      position: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+        w: 0.0
+    close_enough: 0.0
+    goal_timeout: 0.0
+    failure_mode: ''
+---

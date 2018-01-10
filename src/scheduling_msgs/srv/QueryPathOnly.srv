@@ -1,0 +1,5 @@
+int32 agvID
+geometry_msgs/Pose2D agvPos
+geometry_msgs/Pose2D goalPos
+---
+bool isValid

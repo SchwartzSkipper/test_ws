@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="stage_ros" type="stageros" respawn="false" name="yk_stage" args="$(find yk_forklift_simulator)/world/yk_forklift.world"/>
+</launch>

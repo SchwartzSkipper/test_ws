@@ -1,0 +1,13 @@
+int32 task_id 			#if task_id is -1, create a new task, the modify it
+string loading_station
+string unloading_station
+---
+int32 feedback
+#>=0 task_id if add or modify task successfully
+#-1 invalid station name;
+#-2 invalid action
+#-3 task list full
+#-4 exsits same task (repeated request?)
+#-5 task task_id does not exist
+#-6 task task_id has been completed
+#-7 task task_id cannot be modified

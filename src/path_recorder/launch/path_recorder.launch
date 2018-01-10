@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+<!--	<group ns="gb">-->
+		<arg name="filename" default="$(find teb_locals)/path/path00.txt"/>
+		<arg name="topicname" default="/amcl_pose"/>
+    	<node name="path_recorder_node" pkg="path_recorder" type="path_recorder_node" output="screen">
+    		<param name="pathfilename" value="$(arg filename)"/>
+    		<param name="posetopic" value="$(arg topicname)"/>
+    	</node>
+<!--	</group>-->
+</launch>

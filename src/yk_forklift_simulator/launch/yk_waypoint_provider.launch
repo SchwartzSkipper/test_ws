@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="filename" default="$(find yk_forklift_simulator)/param/yk_waypoints.yaml"/>
+  <node pkg="yocs_waypoint_provider" name="waypoint_provider" type="waypoint_provider" output="screen">
+    <param name="filename" value="$(arg filename)"/>
+  </node>
+</launch>

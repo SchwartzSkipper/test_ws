@@ -1,0 +1,618 @@
+waypoints:
+  - name: init
+    frame_id: map
+    home: 充电位_
+    type: initial_pose
+  - name: 充电位_robot_0
+    call: line_center_4500_cb
+    frame_id: map
+    type: workstation
+    pose:
+      position:
+        x: 5.476
+        y: -3.2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 充电位_robot
+    call: line_center_4500_cb
+    frame_id: map
+    iter: 5
+    iter_span: 1.28
+    type: workstation
+    pose:
+      position:
+        x: 4.196
+        y: -3.2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 切管机
+    call: line_center_3700_cb
+    frame_id: map
+    type: workstation
+    pose:
+      position:
+        x: -34.35
+        y: -1.9
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 冲压机1
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: 2.4
+    type: workstation
+    pose:
+      position:
+        x: 15.2
+        y: -1.9
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 冲压机2
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: 1.87
+    type: workstation
+    pose:
+      position:
+        x: 11.16
+        y: -1.9
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 中间缓存区_A
+    call: line_center_cb
+    frame_id: map
+    iter: 8
+    iter_span: 1.68
+    type: workstation
+    pose:
+      position:
+        x: 33.8
+        y: -1.9
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 中间缓存区_B
+    call: line_center_2500_cb
+    frame_id: map
+    iter: 8
+    iter_span: -1.68
+    type: workstation
+    pose:
+      position:
+        x: 33.8
+        y: -7.3
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 切割机1
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: -1.85
+    type: workstation
+    pose:
+      position:
+        x: 42.65
+        y: 4.5
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: 切割机2
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: -1.4
+    type: workstation
+    pose:
+      position:
+        x: 20.2
+        y: 4.5
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: 折弯机1
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: 2.2
+    type: workstation
+    pose:
+      position:
+        x: 61.5847
+        y: -2.5
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 折弯机2
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: 2.6
+    type: workstation
+    pose:
+      position:
+        x: 54.95
+        y: -2.5
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 折弯机3
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: 1.72
+    type: workstation
+    pose:
+      position:
+        x: 47.65
+        y: -2.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 折弯机4
+    call: line_center_cb
+    frame_id: map
+    iter: 2
+    iter_span: 1.6
+    type: workstation
+    pose:
+      position:
+        x: 41.44
+        y: -2.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 最终缓存区_A
+    call: line_center_3700_cb
+    frame_id: map
+    iter: 19
+    iter_span: -1.45
+    type: workstation
+    pose:
+      position:
+        x: 65.5
+        y: -12
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: 最终缓存区_B
+    call: line_center_3700_cb
+    frame_id: map
+    iter: 19
+    iter_span: 1.45
+    type: workstation
+    pose:
+      position:
+        x: 65.5
+        y: -19.4
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 焊接线1_A
+    call: line_center_2500_cb
+    frame_id: map
+    iter: 7
+    iter_span: -1.58
+    type: workstation
+    pose:
+      position:
+        x: 61.25
+        y: -26.17
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: 焊接线1_B
+    call: line_center_2500_cb
+    frame_id: map
+    iter: 7
+    iter_span: 1.58
+    type: workstation
+    pose:
+      position:
+        x: 61.25
+        y: -31.17
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: 焊接线2_A
+    call: line_center_2500_cb
+    frame_id: map
+    iter: 7
+    iter_span: -1.58
+    type: workstation
+    pose:
+      position:
+        x: 61.25
+        y: -36.17
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: 焊接线2_B
+    call: line_center_2500_cb
+    frame_id: map
+    iter: 7
+    iter_span: 1.58
+    type: workstation
+    pose:
+      position:
+        x: 61.25
+        y: -41.17
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: set_navfn
+    node: /move_base/MixedPlanner/navfn_planner
+    param: planner_is_navfn
+    type: dynparam
+    value: true
+  - name: set_fixed
+    node: /move_base/MixedPlanner/navfn_planner
+    param: planner_is_navfn
+    type: dynparam
+    value: false
+  - name: light_green
+    plc_io: 512
+    plc_io_cmd: set
+    type: plc_io
+  - name: light_yellow
+    plc_io: 256
+    plc_io_cmd: set
+    type: plc_io
+  - name: light_red
+    plc_io: 128
+    plc_io_cmd: set
+    type: plc_io
+  - name: light_off
+    plc_io: 0
+    plc_io_cmd: set
+    type: plc_io
+  - name: lift_up
+    plc_io: 32
+    plc_io_cmd: set
+    type: plc_io
+  - name: lift_down
+    plc_io: 16
+    plc_io_cmd: set
+    type: plc_io
+  - name: lift_hang
+    plc_io: 0
+    plc_io_cmd: set
+    type: plc_io
+  - name: wait3s
+    goal_timeout: 3
+    type: timer
+  - name: wait4s
+    goal_timeout: 4
+    type: timer
+  - name: wait5s
+    goal_timeout: 5
+    type: timer
+  - name: tail_up
+    frame_id: map
+    goal_timeout: 60.0
+    mark: true
+    type: tail
+    pose:
+      position:
+        x: -0.05
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: tail_down
+    frame_id: map
+    goal_timeout: 60.0
+    mark: true
+    type: tail
+    pose:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: line_center
+    failure_mode: LOOP
+    frame_id: map
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 3.2
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: line_center_4500
+    failure_mode: LOOP
+    frame_id: map
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 3.7
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: line_center_3700
+    failure_mode: LOOP
+    frame_id: map
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 3.7
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: line_center_2500
+    failure_mode: LOOP
+    frame_id: map
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 2.5
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: line_left
+    failure_mode: LOOP
+    frame_id: map
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 3
+        y: 2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: line_right
+    failure_mode: LOOP
+    frame_id: map
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 3
+        y: 2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: line_auto
+    failure_mode: LOOP
+    frame_id: map
+    line: true
+    mark: true
+    type: goal
+    pose:
+      position:
+        x: 3
+        y: 3
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: lift_up_wp
+    failure_mode: lift_up_cb
+    type: call
+  - name: lift_down_wp
+    failure_mode: lift_down_cb
+    type: call
+  - name: tail_up_wp
+    failure_mode: tail_up_cb
+    type: call
+  - name: tail_down_wp
+    failure_mode: tail_down_cb
+    type: call
+  - name: line_left_up_wp
+    failure_mode: line_left_up_cb
+    type: call
+  - name: line_left_down_wp
+    failure_mode: line_left_down_cb
+    type: call
+  - name: line_right_up_wp
+    failure_mode: line_right_up_cb
+    type: call
+  - name: line_right_down_wp
+    failure_mode: line_right_down_cb
+    type: call
+  - name: line_auto_dock_wp
+    failure_mode: line_auto_dock_cb
+    type: call
+  - name: line_auto_up_wp
+    failure_mode: line_auto_up_cb
+    type: call
+  - name: line_auto_down_wp
+    failure_mode: line_auto_down_cb
+    type: call
+trajectories:
+  - name: 切管机-冲压机1_1
+    waypoints:
+    - 切管机
+    - line_auto_up_wp
+    - line_center
+    - 冲压机1_1
+    - line_auto_down_wp
+    - line_center
+  - name: 冲压机2_1-切割机1_2
+    waypoints:
+    - 冲压机2_1
+    - line_auto_up_wp
+    - line_center
+    - 切割机1_2
+    - line_auto_down_wp
+    - line_center
+  - name: lift_up_cb
+    waypoints:
+    - lift_up
+    - wait4s
+    - lift_hang
+  - name: lift_down_cb
+    waypoints:
+    - lift_down
+    - wait4s
+    - lift_hang
+  - name: tail_up_cb
+    waypoints:
+    - tail_up
+    - lift_up_wp
+  - name: tail_down_cb
+    waypoints:
+    - tail_down
+    - lift_down_wp
+  - name: line_center_cb
+    waypoints:
+    - light_green
+    - set_fixed
+    - line_center
+    - set_navfn
+  - name: line_center_4500_cb
+    waypoints:
+    - light_green
+    - set_fixed
+    - line_center_4500
+    - set_navfn
+  - name: line_center_3700_cb
+    waypoints:
+    - light_green
+    - set_fixed
+    - line_center_3700
+    - set_navfn
+  - name: line_center_2500_cb
+    waypoints:
+    - light_green
+    - set_fixed
+    - line_center_2500
+    - set_navfn
+  - name: line_left_up_cb
+    waypoints:
+    - set_navfn
+    - line_left
+    - tail_up_wp
+  - name: line_left_down_cb
+    waypoints:
+    - set_navfn
+    - line_left
+    - tail_down_wp
+  - name: line_right_up_cb
+    waypoints:
+    - set_navfn
+    - line_right
+    - tail_up_wp
+  - name: line_right_down_cb
+    waypoints:
+    - set_navfn
+    - line_right
+    - tail_down_wp
+  - name: line_auto_dock_cb
+    waypoints:
+    - light_yellow
+    - line_auto
+    - tail_down
+    - light_off
+  - name: line_auto_up_cb
+    waypoints:
+    - light_yellow
+    - line_auto
+    - tail_up_wp
+    - light_off
+  - name: line_auto_down_cb
+    waypoints:
+    - light_yellow
+    - line_auto
+    - tail_down_wp
+    - light_off

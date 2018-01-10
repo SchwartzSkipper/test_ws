@@ -1,0 +1,6 @@
+int32 id
+---
+int32 feedback
+#1 AGV is not in list
+#2 AGV has no task
+#3 AGV task cannot be cancelled

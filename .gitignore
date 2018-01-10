@@ -1,0 +1,11 @@
+build
+devel
+*~
+.*
+!.catkin_workspace
+!.gitignore
+# QtCtreator CMake
+CMakeLists.txt.user*
+*-Default
+*-Debug
+*-Releasesss

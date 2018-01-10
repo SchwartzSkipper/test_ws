@@ -1,0 +1,566 @@
+waypoints:
+  - name: wait5s
+    close_enough: 0
+    failure_mode: NONE
+    goal_timeout: 5
+    type: timer
+  - name: vel_slow
+    close_enough: -0.0001
+    failure_mode: NONE
+    goal_timeout: 4
+    type: cmd_vel
+  - name: shell_fork_up
+    close_enough: 0
+    failure_mode: NONE
+    goal_timeout: 3
+    type: shell
+  - name: shell_fork_down
+    close_enough: 0
+    failure_mode: NONE
+    goal_timeout: 3
+    type: shell
+  - name: shell_fork_hang
+    close_enough: 0
+    failure_mode: NONE
+    goal_timeout: 3
+    type: shell
+  - name: origin_1
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 4.116
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: origin_1_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 2.916
+        y: -3.151
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.6877
+        w: 0.726
+  - name: origin_2_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 4.326
+        y: -3.24
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7002
+        w: 0.7138
+  - name: origin_2
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 5.526
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: origin_3
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 1.716
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 1
+        w: 0
+  - name: origin_3_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 2.916
+        y: -3.151
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.6877
+        w: 0.726
+  - name: origin_4
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 52
+        y: 5
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: origin_5_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 0.353
+        y: -3.193
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.686
+        w: 0.7276
+  - name: origin_5
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 1.553
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: slicer
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: -32
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: pipecutter
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: -25
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: lasercutter_0
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 22
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: lasercutter_1
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 43
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: punch
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 12
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: punch_tail
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: tail
+    pose:
+      position:
+        x: 10
+        y: -1
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: bender_0
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 40
+        y: -2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: bender_1
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 47
+        y: 2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: bender_2
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 53
+        y: 2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: bender_3
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 61
+        y: 2
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: welder
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 55
+        y: -30
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 1
+        w: 0
+  - name: loading
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: action
+    pose:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 1
+        w: 0
+  - name: unloading
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: action
+    pose:
+      position:
+        x: 0
+        y: 0
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 1
+        w: 0
+  - name: punchtest
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 16.5527
+        y: 1.82243
+        z: 1.38778e-17
+      orientation:
+        x: 0
+        y: 0
+        z: -0.00842699
+        w: 0.999964
+  - name: cache
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 23.1977
+        y: 1.866
+        z: -2.77556e-17
+      orientation:
+        x: 0
+        y: 0
+        z: -0.00877802
+        w: 0.999961
+  - name: lasercutter_4_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 42.7
+        y: 4.63
+        z: -2.77556e-17
+      orientation:
+        x: 0
+        y: 0
+        z: -0.7071
+        w: 0.7071
+  - name: lasercutter_4
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 43.9
+        y: 1.8
+        z: -2.77556e-17
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: punchtest_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 15.3
+        y: -1.84
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: cache_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 22.083
+        y: -1.915
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: semi_product_buffer_1_4_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 27.109
+        y: -1.915
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: semi_product_buffer_1_4
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 28.309
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+  - name: semi_product_buffer_1_8_tail
+    frame_id: map
+    type: tail
+    pose:
+      position:
+        x: 33.702
+        y: -1.88
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+  - name: semi_product_buffer_1_8
+    close_enough: 0
+    failure_mode: LOOP
+    frame_id: map
+    goal_timeout: 0
+    type: workstation
+    pose:
+      position:
+        x: 34.902
+        y: 1.8
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0
+        w: 1
+trajectories:
+  - name: punchtest_loading
+    waypoints:
+    - punchtest_tail
+    - shell_fork_up
+    - vel_slow
+    - shell_fork_hang
+  - name: punchtest_unloading
+    waypoints:
+    - punchtest_tail
+    - shell_fork_down
+    - vel_slow
+    - shell_fork_hang
+  - name: cache_loading
+    waypoints:
+    - cache_tail
+    - shell_fork_up
+    - vel_slow
+    - shell_fork_hang
+  - name: cache_unloading
+    waypoints:
+    - cache_tail
+    - shell_fork_down
+    - vel_slow
+    - shell_fork_hang
+  - name: semi_product_buffer_1_4_loading
+    waypoints:
+    - semi_product_buffer_1_4_tail
+    - shell_fork_up
+    - vel_slow
+    - shell_fork_hang
+  - name: semi_product_buffer_1_4_unloading
+    waypoints:
+    - semi_product_buffer_1_4_tail
+    - shell_fork_down
+    - vel_slow
+    - shell_fork_hang
+  - name: semi_product_buffer_1_8_loading
+    waypoints:
+    - semi_product_buffer_1_8_tail
+    - shell_fork_up
+    - vel_slow
+    - shell_fork_hang
+  - name: semi_product_buffer_1_8_unloading
+    waypoints:
+    - semi_product_buffer_1_8_tail
+    - shell_fork_down
+    - vel_slow
+    - shell_fork_hang
+  - name: origin_3_docking
+    waypoints:
+    - origin_3_tail
+  - name: origin_5_docking
+    waypoints:
+    - origin_5_tail

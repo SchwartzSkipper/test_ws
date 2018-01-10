@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find yk_forklift_simulator)/launch/yk_stage_four.launch"/>
+</launch>

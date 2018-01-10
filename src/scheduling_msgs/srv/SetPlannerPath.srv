@@ -1,0 +1,8 @@
+Header header
+int32 priority
+int32 pathID
+geometry_msgs/Pose2D[] poses
+---
+int32 feedback
+#>0 successful
+#0 failed

@@ -1,0 +1,5 @@
+int32 taskID
+string source_station
+int32 source_action
+string destination_station
+int32 destination_action

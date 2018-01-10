@@ -1,0 +1,4 @@
+int32 agvID
+---
+bool isValid
+geometry_msgs/PoseStamped pose

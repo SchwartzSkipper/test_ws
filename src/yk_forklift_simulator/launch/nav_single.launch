@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find yk_forklift_simulator)/launch/move_base_single.launch"/>
+    <include file="$(find yk_forklift_simulator)/launch/amcl_single.launch"/>
+</launch>

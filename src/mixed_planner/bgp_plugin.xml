@@ -1,0 +1,7 @@
+<library path="lib/libmixed_planner">
+  <class name="global_planner/MixedPlanner" type="global_planner::MixedPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      An implementation of mixed global planner which merges fixed global planner and navfn
+    </description>
+  </class>
+</library>

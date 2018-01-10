@@ -1,0 +1,52 @@
+<!-- 
+  Simulate a differential drive robot with the teb_local_planner in stage:
+  - stage
+  - map_server
+  - move_base
+  - static map
+  - amcl
+  - rviz view
+ -->
+<launch>
+
+        <!--  ************** Global Parameters ***************  -->
+        <param name="/use_sim_time" value="true"/>
+
+        <!--  ************** Stage Simulator ***************  -->
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find teb_locals)/stage/yancon_carlike.world">
+    <remap from="base_scan" to="scan"/>
+    </node>
+
+        <!--  ************** Navigation ***************  -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find teb_locals)/cfg/carlike/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find teb_locals)/cfg/carlike/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find teb_locals)/cfg/carlike/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find teb_locals)/cfg/carlike/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find teb_locals)/cfg/carlike/dwa_local_planner_params.yaml" command="load" />
+
+    <param name="base_global_planner" value="navfn/NavfnROS" />
+    <param name="planner_frequency" value="1.0" />
+    <param name="planner_patience" value="5.0" />
+
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <param name="controller_frequency" value="5.0" />
+    <param name="controller_patience" value="15.0" />
+  </node>
+
+
+  <!--  ****** Maps *****  -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find teb_locals)/maps/map.yaml" output="screen">
+    <param name="frame_id" value="/map"/>
+  </node>
+
+    <include file="$(find teb_locals)/launch/amcl.launch">
+        <arg name="initial_pose_x" value="0.0"/>
+       <arg name="initial_pose_y" value="0.0"/>
+       <arg name="initial_pose_a" value="0.0"/>
+    </include>
+
+    <!--  **************** Visualisation ****************  -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find teb_locals)/cfg/rviz.rviz" />
+
+</launch>

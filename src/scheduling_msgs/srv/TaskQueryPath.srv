@@ -1,0 +1,10 @@
+Header header
+int32 agvID
+string agvName
+geometry_msgs/PoseStamped agvPos
+geometry_msgs/PoseStamped goalPos
+---
+bool isValid
+int32 pathID
+string pathTopic
+int32 bufferID #bufferID 0 means that the path has already be publisher immediately

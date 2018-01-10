@@ -1,0 +1,7 @@
+Header header
+int32 agvID
+geometry_msgs/PoseStamped agvPos
+geometry_msgs/PoseStamped goalPos
+---
+bool isValid
+geometry_msgs/Pose2D[] path

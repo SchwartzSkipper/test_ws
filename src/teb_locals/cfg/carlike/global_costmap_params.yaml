@@ -1,0 +1,14 @@
+global_costmap:
+   global_frame: /map
+   robot_base_frame: /base_link
+   update_frequency: 2.0 
+   publish_frequency: 1.0 #0.5
+   static_map: true
+   transform_tolerance: 0.5
+   origin_x: 0.0
+   origin_y: 0.0
+   resolution: 0.075
+
+ #  obstacle_layer: 
+ #    enabled:              false
+

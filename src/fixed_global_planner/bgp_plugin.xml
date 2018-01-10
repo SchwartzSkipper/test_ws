@@ -1,0 +1,7 @@
+<library path="lib/libfixed_global_planner">
+  <class name="global_planner/FixedGlobalPlanner" type="global_planner::FixedGlobalPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      An implementation of fixed global plannar
+    </description>
+  </class>
+</library>
