@@ -23,7 +23,13 @@ BZPlannerROS::BZPlannerROS() : odom_helper_("odom"),
                                x_offset_neg_(1.0),
                                source_u_(0.3),
                                target_v_(0.5),
-                               current_tolerance_(1024.0)                   
+                               current_tolerance_(1024.0),
+                               max_vel_x_(0.3),
+                               min_vel_x_(0.15),
+                               angular_ratio_(3.0),
+                               vel_ratio_(0.1),
+                               wheel_base_(1.55),
+                               final_goal_lock_(false)                   
 {}
 
 BZPlannerROS::~BZPlannerROS()
@@ -42,10 +48,10 @@ void BZPlannerROS::initialize(std::string name,
         tf_ = tf;
         costmap_ros_ = costmap_ros;
         costmap_ros_->getRobotPose(current_pose_);
-        costmap_ = costmap_ros_->getCostmap();
+        costmap_2d::Costmap2D* costmap = costmap_ros_->getCostmap();
         global_frame_ = costmap_ros_->getGlobalFrameID();
-        planner_util_.initialize(tf_, costmap_, costmap_ros_->getGlobalFrameID());
-        obstacle_cost_ = std::make_shared<base_local_planner::ObstacleCostFunction>(costmap_);
+        planner_util_.initialize(tf_, costmap, costmap_ros_->getGlobalFrameID());
+        obstacle_cost_ = std::make_shared<base_local_planner::ObstacleCostFunction>(costmap);
         obstacle_cost_->prepare();
         if (pnh.getParam("odom_topic", odom_topic_))
         {
@@ -86,8 +92,7 @@ bool BZPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped>& plan)
     }
     if (planner_util_.setPlan(plan))
     {
-    	global_plan_.clear();
-    	global_plan_ = plan;
+        final_goal_lock_ = false;
         // reset current tolerance
         current_tolerance_ = 1024.0;
         tf::Stamped<tf::Pose> goal_pose;
@@ -97,60 +102,94 @@ bool BZPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped>& plan)
         try
         {
             tf_->waitForTransform("/map", goal_pose.frame_id_, ros::Time(0), ros::Duration(5.0));
-            tf_->transformPose("/map", pose, goal_); 
+            tf_->transformPose("/map", ros::Time(0),  pose, global_frame_, final_goal_); 
         }
         catch(tf::TransformException& ex)
         {
             ROS_ERROR("%s", ex.what());
-            exit(1);
+            return false; //exit(1);
         }
+
+        costmap_ros_->getRobotPose(current_pose_);
+        geometry_msgs::PoseStamped cpose, cglobal_pose;
+        tf::poseStampedTFToMsg(current_pose_, cpose);
+        try
+        {
+            tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
+            tf_->transformPose("/map", ros::Time(0), cpose, global_frame_, cglobal_pose); 
+        }
+        catch(tf::TransformException& ex)
+        {
+            ROS_ERROR("%s", ex.what());
+            return false; //exit(1);
+        }
+        bezierParams(select, cglobal_pose, final_goal_);
+
         return true;
     }
     return false;
 }
 
-bool BZPlannerROS::getLocalPlan(tf::Stamped<tf::Pose>& global_pose, std::vector<geometry_msgs::PoseStamped>& transformed_plan) {
-  //get the global plan in our frame
-  if(!base_local_planner::transformGlobalPlan(
-      *tf_,
-      global_plan_,
-      global_pose,
-      *costmap_,
-      global_frame_,
-      transformed_plan)) 
-  {
-    ROS_WARN("Could not transform the global plan to the frame of the controller");
-    return false;
-  }
-  return true;
+bool BZPlannerROS::globalPlanConversion(geometry_msgs::PoseStamped& goal, std::vector<geometry_msgs::PoseStamped>& plan, Bzstruct& a)
+{
+    geometry_msgs::PoseStamped temp_goal1,temp_goal2,temp_goal3;
+    double dist,temp_yaw;
+    temp_goal1 = plan.back();
+    temp_goal2 = plan[plan.size() - 3];
+    try
+    {
+        tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
+        tf_->transformPose("/map", ros::Time(0), temp_goal1, global_frame_, temp_goal1); 
+        tf_->transformPose("/map", ros::Time(0), temp_goal2, global_frame_, temp_goal2);
+    }
+    catch(tf::TransformException& ex)
+    {
+        ROS_ERROR("%s", ex.what());
+        return false;//exit(1);
+    }
+    dist = sqrt(pow(final_goal_.pose.position.x - temp_goal1.pose.position.x , 2)
+                + pow(final_goal_.pose.position.y - temp_goal1.pose.position.y, 2));
+    temp_yaw = atan2((temp_goal1.pose.position.y - temp_goal2.pose.position.y),(temp_goal1.pose.position.x - temp_goal2.pose.position.x));
+    temp_yaw = (a.pr_len > 0 ? temp_yaw : temp_yaw + M_PI); 
+    if(dist < 0.0001)
+    {
+        goal = final_goal_;
+        final_goal_lock_ = true;
+    }
+    else
+    {
+        goal = plan.back();
+        goal.pose.orientation = tf::createQuaternionMsgFromYaw(temp_yaw);
+    }
+    return true;
 }
 
 bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
 {
+    std::vector<geometry_msgs::PoseStamped> transformed_plan;
+
     if (!costmap_ros_->getRobotPose(current_pose_))
     {
         ROS_ERROR("Could not get robot pose");
         return false;
     }
-
-    std::vector<geometry_msgs::PoseStamped> transformed_plan;
-    if (!getLocalPlan(current_pose_,transformed_plan))  
+    if(!planner_util_.getLocalPlan(current_pose_, transformed_plan))
     {
-      ROS_ERROR("Could not get local plan");
-      return false;
+        ROS_ERROR("Could not transform local plan");
+        return false;
     }
-
-    //if the global plan passed in is empty... we won't do anything
-    if(transformed_plan.empty()) {
-      ROS_WARN_NAMED("bz_local_planner", "Received an empty transformed plan.");
-      return false;
+    if(!final_goal_lock_)
+    {
+        if(!globalPlanConversion(goal_, transformed_plan, select)){
+            ROS_ERROR("Could not convert the global path into the goal used for calculating bezier curves");
+            return false;
+        }
     }
-
-    goal_ = transformed_plan.back();
-
     std::lock_guard<std::mutex> lk(dyn_params_mutex_);
     std::vector<geometry_msgs::Pose2D> bz_ctrl_points;
-    calcBezierVel(cmd_vel, bz_ctrl_points);
+    if (!calcBezierVel(cmd_vel, bz_ctrl_points, goal_)) {
+        return false;
+    }
     publishBezierPlan(bz_ctrl_points);
     publishBezierCtrlPoints(bz_ctrl_points);
     base_local_planner::Trajectory result_traj;
@@ -199,6 +238,13 @@ void BZPlannerROS::reconfigureCB(BZPlannerConfig &config, uint32_t level)
 	xy_tolerance_ = config.xy_tolerance;
 	yaw_tolerance_ = config.yaw_tolerance;
 	goal_reach_level_ = config.goal_reach_level;
+    max_vel_x_ = config.max_vel_x;
+    min_vel_x_ = config.min_vel_x;
+    vel_ratio_ = config.vel_ratio;
+    angular_ratio_ = config.angular_ratio;
+    wheel_base_ = config.wheel_base;
+    x_offset_neg_ = config.x_offset_neg;
+    x_offset_pos_ = config.x_offset_pos;
 	ROS_INFO("Updated bz_local_planner dynamic parameters");
 }
 
@@ -317,82 +363,89 @@ Eigen::Vector3f BZPlannerROS::calcNewPosition(const Eigen::Vector3f& pos,
     return new_pos;
 }                                              
 
-void BZPlannerROS::calcBezierVel(geometry_msgs::Twist& cmd_vel, std::vector<geometry_msgs::Pose2D>& points)
+void BZPlannerROS::bezierParams(Bzstruct& bzstr, geometry_msgs::PoseStamped& current_p, geometry_msgs::PoseStamped& goal)
+{
+    bzstr.ps.x = current_p.pose.position.x;
+    bzstr.ps.y = current_p.pose.position.y;
+    bzstr.ps.theta = tf::getYaw(current_p.pose.orientation);
+    bzstr.ps_tan = tan(bzstr.ps.theta);
+    bzstr.pt.x = goal.pose.position.x;
+    bzstr.pt.y = goal.pose.position.y;
+    bzstr.pt.theta = tf::getYaw(goal.pose.orientation);
+    bzstr.pt_tan = tan(bzstr.pt.theta);
+    bzstr.pr.x = (bzstr.ps_tan * bzstr.ps.x - bzstr.pt_tan * bzstr.pt.x - bzstr.ps.y + bzstr.pt.y) / (bzstr.ps_tan - bzstr.pt_tan);
+    bzstr.pr.y = bzstr.ps_tan * (bzstr.pr.x - bzstr.ps.x) + bzstr.ps.y;
+    bzstr.pr.theta = atan2(bzstr.ps.y - bzstr.pt.y, bzstr.ps.x - bzstr.pt.x);
+    bzstr.pr_len = sqrt(pow(bzstr.ps.x - bzstr.pt.x, 2) + pow(bzstr.ps.y - bzstr.pt.y, 2));
+    bzstr.px_len = bzstr.pr_len * cos(bzstr.pr.theta -bzstr.pt.theta);
+    // for isGoalReached use
+    current_tolerance_ = bzstr.px_len;
+    bzstr.px_offset = (bzstr.pr_len > (x_offset_pos_ + x_offset_neg_)) ? x_offset_pos_ : (bzstr.pr_len - x_offset_neg_);
+    bzstr.pr_dir = (fabs(bzstr.pt.theta - bzstr.pr.theta) > M_PI) ? (2*M_PI - fabs(bzstr.pt.theta - bzstr.pr.theta)) : (fabs(bzstr.pt.theta - bzstr.pr.theta));
+    if (bzstr.pr_dir < M_PI_2) 
+    {
+        bzstr.pr_len = - bzstr.pr_len;
+        bzstr.px_offset = - bzstr.px_offset;
+    }
+    bzstr.pt.x = bzstr.pt.x - bzstr.px_offset * cos(bzstr.pt.theta);
+    bzstr.pt.y = bzstr.pt.y - bzstr.px_offset * sin(bzstr.pt.theta);
+    bzstr.ps_offset = (bzstr.pr_len - bzstr.px_offset) * source_u_;
+    bzstr.pu.x = bzstr.ps.x + bzstr.ps_offset * cos(bzstr.ps.theta);
+    bzstr.pu.y = bzstr.ps.y + bzstr.ps_offset * sin(bzstr.ps.theta);
+    bzstr.pt_offset = (bzstr.pr_len - bzstr.px_offset) * target_v_;
+    bzstr.pv.x = bzstr.pt.x - bzstr.pt_offset * cos(bzstr.pt.theta);
+    bzstr.pv.y = bzstr.pt.y - bzstr.pt_offset * sin(bzstr.pt.theta);
+}
+
+bool BZPlannerROS::calcBezierVel(geometry_msgs::Twist& cmd_vel, std::vector<geometry_msgs::Pose2D>& points, geometry_msgs::PoseStamped& goal)
 {
     geometry_msgs::PoseStamped pose, global_pose;
+    Bzstruct b;
     tf::poseStampedTFToMsg(current_pose_, pose);
     try
     {
-        tf_->waitForTransform("/map", costmap_ros_->getGlobalFrameID(), ros::Time(0), ros::Duration(5.0));
-        tf_->transformPose("/map", pose, global_pose); 
+        tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
+        tf_->transformPose("/map", ros::Time(0), pose, global_frame_, global_pose); 
     }
     catch(tf::TransformException& ex)
     {
         ROS_ERROR("%s", ex.what());
-        exit(1);
+        return false; //exit(1);
     }
-    geometry_msgs::Pose2D pr, ps, pt, pu, pv;
-    ps.x = global_pose.pose.position.x;
-    ps.y = global_pose.pose.position.y;
-    ps.theta = tf::getYaw(global_pose.pose.orientation);
-    double ps_tan = tan(ps.theta);
-    pt.x = goal_.pose.position.x;
-    pt.y = goal_.pose.position.y;
-    pt.theta = tf::getYaw(goal_.pose.orientation);
-    double pt_tan = tan(pt.theta);
-    pr.x = (ps_tan * ps.x - pt_tan * pt.x - ps.y + pt.y) / (ps_tan - pt_tan);
-    pr.y = ps_tan * (pr.x - ps.x) + ps.y;
-    pr.theta = atan2(ps.y - pt.y, ps.x - pt.x);
-    double pr_len = sqrt(pow(ps.x - pt.x, 2) + pow(ps.y - pt.y, 2));
-    double px_len = pr_len * cos(pr.theta -pt.theta);
-    // for isGoalReached use
-    current_tolerance_ = px_len;
-    double px_offset = (pr_len > (x_offset_pos_ + x_offset_neg_)) ? x_offset_pos_ : (pr_len - x_offset_neg_);
-    double pr_dir = (fabs(pt.theta - pr.theta) > M_PI) ? (2*M_PI - fabs(pt.theta - pr.theta)) : (fabs(pt.theta - pr.theta));
-    if (pr_dir < M_PI_2) 
-    {
-        pr_len = - pr_len;
-        px_offset = - px_offset;
-    }
-    pt.x = pt.x - px_offset * cos(pt.theta);
-    pt.y = pt.y - px_offset * sin(pt.theta);
-    double ps_offset = (pr_len - px_offset) * source_u_;
-    pu.x = ps.x + ps_offset * cos(ps.theta);
-    pu.y = ps.y + ps_offset * sin(ps.theta);
-    double pt_offset = (pr_len - px_offset) * target_v_;
-    pv.x = pt.x - pt_offset * cos(pt.theta);
-    pv.y = pt.y - pt_offset * sin(pt.theta);
-    double dx_d = ps.x;
-    double dx_c = 3.0*(pu.x-ps.x);
-    double dx_b = 3.0*(pv.x-pu.x)-dx_c;
-    double dx_a = pt.x-ps.x-dx_c-dx_b;
-    double dy_d = ps.y;
-    double dy_c = 3.0*(pu.y-ps.y);
-    double dy_b = 3.0*(pv.y-pu.y)-dy_c;
-    double dy_a = pt.y-ps.y-dy_c-dy_b;
+    bezierParams(b, global_pose, goal);
+    double dx_d = b.ps.x;
+    double dx_c = 3.0*(b.pu.x-b.ps.x);
+    double dx_b = 3.0*(b.pv.x-b.pu.x)-dx_c;
+    double dx_a = b.pt.x-b.ps.x-dx_c-dx_b;
+    double dy_d = b.ps.y;
+    double dy_c = 3.0*(b.pu.y-b.ps.y);
+    double dy_b = 3.0*(b.pv.y-b.pu.y)-dy_c;
+    double dy_a = b.pt.y-b.ps.y-dy_c-dy_b;
     double t = 0.1;
     double tSquared = pow(t,2);
     double tCubed = tSquared*t;
     double dx = dx_a*tCubed + dx_b*tSquared + dx_c*t + dx_d;
     double dy = dy_a*tCubed + dy_b*tSquared + dy_c*t + dy_d; 
-    double dxy = sqrt(pow(dx - ps.x, 2) + pow(dy - ps.y, 2));
-    double dyaw_temp = ps.theta - (pr_len < 0 ? M_PI : 0) * (ps.theta > 0 ? 1 : -1);
-    double dyaw2 = atan2(dy-ps.y, dx-ps.x);
+    double dxy = sqrt(pow(dx - b.ps.x, 2) + pow(dy - b.ps.y, 2));
+    double dyaw_temp = b.ps.theta - (b.pr_len < 0 ? M_PI : 0) * (b.ps.theta > 0 ? 1 : -1);
+    double dyaw2 = atan2(dy-b.ps.y, dx-b.ps.x);
     double dyaw = fmod(dyaw2 - dyaw_temp, M_PI * 2);
     if (dyaw > M_PI) 
         dyaw -= M_PI*2;
     if (dyaw < -M_PI) 
         dyaw += M_PI*2;
-    cmd_vel.linear.x = (pr_len > 0 ? 1 : -1);
-    cmd_vel.angular.z = fabs(cmd_vel.linear.x / dxy) * dyaw * 3;
-    double cmd_vel_factor = (1 / sqrt(pow(cmd_vel.linear.x, 2) + pow(cmd_vel.angular.z, 2)));
-    cmd_vel_factor *= fmin(0.1 * px_len + 0.15, 0.3);
+    cmd_vel.linear.x = (b.pr_len > 0 ? 1 : -1);
+    cmd_vel.angular.z = fabs(cmd_vel.linear.x / dxy) * dyaw * angular_ratio_;
+    double cmd_vel_factor = (1 / sqrt(pow(cmd_vel.linear.x, 2) + pow(cmd_vel.angular.z * wheel_base_, 2)));
+    cmd_vel_factor *= fmin(vel_ratio_ * fmax(fabs(b.px_len) - x_offset_pos_, 0) + min_vel_x_, max_vel_x_);
     cmd_vel.linear.x *= cmd_vel_factor;
     cmd_vel.angular.z *= cmd_vel_factor;
-    points.push_back(ps);
-    points.push_back(pu);
-    points.push_back(pv);
-    points.push_back(pt);
+    points.push_back(b.ps);
+    points.push_back(b.pu);
+    points.push_back(b.pv);
+    points.push_back(b.pt);
+
+    return true;
 }
 
 bool BZPlannerROS::goalReachBZLen()
