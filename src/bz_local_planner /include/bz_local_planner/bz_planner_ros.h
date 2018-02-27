@@ -90,6 +90,7 @@ private:
 	double min_vel_x_;
 	double angular_ratio_;
 	double vel_ratio_;
+	double minimum_dist_;
 	double wheel_base_;
 	/*
 	goal reach level:

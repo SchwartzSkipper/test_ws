@@ -29,6 +29,7 @@ BZPlannerROS::BZPlannerROS() : odom_helper_("odom"),
                                angular_ratio_(3.0),
                                vel_ratio_(0.1),
                                wheel_base_(1.55),
+                               minimum_dist_(0.1),
                                final_goal_lock_(false)                   
 {}
 
@@ -151,7 +152,7 @@ bool BZPlannerROS::globalPlanConversion(geometry_msgs::PoseStamped& goal, std::v
                 + pow(final_goal_.pose.position.y - temp_goal1.pose.position.y, 2));
     temp_yaw = atan2((temp_goal1.pose.position.y - temp_goal2.pose.position.y),(temp_goal1.pose.position.x - temp_goal2.pose.position.x));
     temp_yaw = (a.pr_len > 0 ? temp_yaw : temp_yaw + M_PI); 
-    if(dist < 0.0001)
+    if(dist < minimum_dist_)
     {
         goal = final_goal_;
         final_goal_lock_ = true;
@@ -245,6 +246,7 @@ void BZPlannerROS::reconfigureCB(BZPlannerConfig &config, uint32_t level)
     wheel_base_ = config.wheel_base;
     x_offset_neg_ = config.x_offset_neg;
     x_offset_pos_ = config.x_offset_pos;
+    minimum_dist_ = config.minimum_dist;
 	ROS_INFO("Updated bz_local_planner dynamic parameters");
 }
 

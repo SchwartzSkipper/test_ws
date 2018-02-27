@@ -1,0 +1,12 @@
+<!--
+  Starts the provider and loads the provided way pint & trajectory list
+  -->
+  
+<launch>
+  <!-- <arg name="filename" default="$(find yk_forklift_simulator)/param/waypoints.yaml"/> -->
+  <arg name="filename" default="$(find bringup)/param/waypoints.yaml"/>
+  
+  <node pkg="yocs_waypoint_provider" name="waypoint_provider" type="waypoint_provider" output="screen">
+    <param name="filename" value="$(arg filename)"/>
+  </node>
+</launch>
