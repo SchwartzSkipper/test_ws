@@ -256,6 +256,13 @@ namespace move_base {
       }
     }
 
+    if(config.relocation_mode)
+    {
+      ROS_INFO("Setting move_base to relocation mode, local frame_id: %s",config.relocation_frame_id.c_str());
+    }
+    
+    relocation_mode_ = config.relocation_mode;
+    
     last_config_ = config;
   }
 
@@ -516,26 +523,33 @@ namespace move_base {
   }
 
   geometry_msgs::PoseStamped MoveBase::goalToGlobalFrame(const geometry_msgs::PoseStamped& goal_pose_msg){
-    std::string global_frame = planner_costmap_ros_->getGlobalFrameID();
-    tf::Stamped<tf::Pose> goal_pose, global_pose;
-    poseStampedMsgToTF(goal_pose_msg, goal_pose);
-
-    //just get the latest available transform... for accuracy they should send
-    //goals in the frame of the planner
-    goal_pose.stamp_ = ros::Time();
-
-    try{
-      tf_.transformPose(global_frame, goal_pose, global_pose);
+    if(relocation_mode_)
+    {
+      return global_pose_msg;
     }
-    catch(tf::TransformException& ex){
-      ROS_WARN("Failed to transform the goal pose from %s into the %s frame: %s",
-          goal_pose.frame_id_.c_str(), global_frame.c_str(), ex.what());
-      return goal_pose_msg;
-    }
+    else
+    {
+      std::string global_frame = planner_costmap_ros_->getGlobalFrameID();
+      tf::Stamped<tf::Pose> goal_pose, global_pose;
+      poseStampedMsgToTF(goal_pose_msg, goal_pose);
 
-    geometry_msgs::PoseStamped global_pose_msg;
-    tf::poseStampedTFToMsg(global_pose, global_pose_msg);
-    return global_pose_msg;
+      //just get the latest available transform... for accuracy they should send
+      //goals in the frame of the planner
+      goal_pose.stamp_ = ros::Time();
+
+      try{
+        tf_.transformPose(global_frame, goal_pose, global_pose);
+      }
+      catch(tf::TransformException& ex){
+        ROS_WARN("Failed to transform the goal pose from %s into the %s frame: %s",
+            goal_pose.frame_id_.c_str(), global_frame.c_str(), ex.what());
+        return goal_pose_msg;
+      }
+
+      geometry_msgs::PoseStamped global_pose_msg;
+      tf::poseStampedTFToMsg(global_pose, global_pose_msg);
+      return global_pose_msg;
+    }
   }
 
   void MoveBase::wakePlanner(const ros::TimerEvent& event)

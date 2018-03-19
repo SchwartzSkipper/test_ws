@@ -227,6 +227,9 @@ namespace move_base {
       move_base::MoveBaseConfig default_config_;
       bool setup_, p_freq_change_, c_freq_change_;
       bool new_global_plan_;
+
+      //for relocation mode, which forcely doesn't conver the goal into global frame;
+      bool relocation_mode_;
   };
 };
 #endif
