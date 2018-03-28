@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+		<arg name="period" default="1800"/>
+	<node name="punctual_command_node" pkg="punctual_command" type="punctual_command_node" output="screen">
+		<param name="period" value="$(arg period)"/>
+	</node>
+</launch>	
