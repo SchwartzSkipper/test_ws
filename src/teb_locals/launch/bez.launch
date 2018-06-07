@@ -47,6 +47,8 @@
 	</node>
 
 	  <!--  **************** Visualisation ****************  -->
-	  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find teb_locals)/cfg/rviz.rviz" />
+	  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find teb_locals)/cfg/rviz.rviz"/>
+
+	<node pkg="local_pose_talker" type="local_pose_talker_node" name="local_pose_talker" output="screen"/>
 
 </launch>

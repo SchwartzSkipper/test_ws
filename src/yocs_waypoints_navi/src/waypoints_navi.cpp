@@ -32,15 +32,11 @@ WaypointsGoalNode::WaypointsGoalNode() : ph_("~"),
                                          x_offset_neg_(1.0),
                                          source_u_(0.3),
                                          target_v_(0.5),
-                                         angular_ratio_(5.0),
-                                         vel_ratio_(0.3),
+                                         angular_ratio_(3.0),
+                                         vel_ratio_(0.1),
                                          wheel_base_(1.55),
-                                         min_bez_vel_(0.2),
-                                         max_bez_vel_(0.5),
-                                         x_tolerance_(0.05),
-                                         y_tolerance_(0.05),
-                                         yaw_tolerance_(0.05),
-                                         manual_comp_(0.05)
+                                         min_bez_vel_(0.15),
+                                         max_bez_vel_(0.3)
 {}
 
 WaypointsGoalNode::~WaypointsGoalNode()
@@ -72,6 +68,7 @@ bool WaypointsGoalNode::init()
   cmd_vel_set_sub_ = nh_.advertise<std_msgs::Float64>("cmd_vel_set", 1, true);
   cmd_string_pub_ = nh_.advertise<std_msgs::String>("cmd_string", 1, true);
   scan_marker_pub_ = nh_.advertise<std_msgs::Float64>("/scan_marker/trig", 1, true);
+  local_marker_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("relocation_goal",1,true);  
   marker_pub_ = nh_.advertise<geometry_msgs::PoseWithCovarianceStamped>("source_mark", 1, true);
   marker_sub_ = nh_.subscribe("target_mark", 1, &WaypointsGoalNode::marker_sub, this);
   cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1, true);
@@ -332,9 +329,16 @@ void WaypointsGoalNode::spin()
         else if ("subscriber" == json_value["type"].asString())
         {
           is_user_sub_ = false;
+          double t = atof(json_value["goal_timeout"].asString().c_str()); //timeout temporary completion
+          ros::Duration tt = ros::Duration(t);
+          ros::Time timeout_in_ = ros::Time::now();
           while (ros::ok() && !is_user_sub_)
           {
             ros::spinOnce();
+            if ((t > 0) && (ros::Time::now() - timeout_in_ > tt))
+            {
+              break;
+            }
           }
           if (state_ == IDLE)
           {
@@ -348,6 +352,9 @@ void WaypointsGoalNode::spin()
           msg.data = waypoints_it_->name;
           user_data_ = "";
           is_user_sub_ok_ = false;
+          double t = atof(json_value["goal_timeout"].asString().c_str());//timeout temporary completion
+          ros::Duration tt = ros::Duration(t);
+          ros::Time timeout_in_ = ros::Time::now();
           while (ros::ok() && !is_user_sub_ok_)
           {
             usleep(10000);
@@ -368,6 +375,10 @@ void WaypointsGoalNode::spin()
             {
               is_user_sub_ok_ = true;
             }
+            if ((t > 0) && (ros::Time::now() - timeout_in_ > tt))
+            {
+              break;
+            }
           }
           if (state_ == IDLE)
           {
@@ -375,6 +386,45 @@ void WaypointsGoalNode::spin()
           }
           waypoints_it_++;
         }
+        else if ("switch" == json_value["type"].asString())
+        {
+          Json::Value json_cases = json_value["failure_mode"];
+          std_msgs::String query_msg;
+          query_msg.data = "switch:" + json_value["frame_id"].asString();
+          waypoint_user_pub_.publish(query_msg);
+
+          is_user_sub_ = false;
+          user_data_ = "";
+          ros::Time time_in = ros::Time::now();
+          double t = atof(json_value["goal_timeout"].asString().c_str()) ? fabs(atof(json_value["goal_timeout"].asString().c_str())) : 5.0;
+          ros::Duration time_out = ros::Duration(t);
+          while (ros::ok() && !is_user_sub_)
+          {
+            usleep(1e4);
+            ros::spinOnce();
+            if (ros::Time::now() - time_in > time_out)
+            {
+              break;
+            }
+          }
+          if (json_cases.isMember(user_data_))
+          {
+            std::string traj_name = json_cases[user_data_].asString();
+            waypoints_it_++;
+            for (int traj = 0; traj < traj_list_.trajectories.size(); ++traj)
+            {
+              if (traj_name == traj_list_.trajectories[traj].name)
+              {
+                for (int wp = traj_list_.trajectories[traj].waypoints.size() - 1; wp >= 0; --wp)
+                {
+                  waypoints_it_ = waypoints_.insert(waypoints_it_, traj_list_.trajectories[traj].waypoints[wp]);
+                }
+              }
+            }
+            waypoints_it_--;
+          }
+          waypoints_it_++;
+        } // else if switch
         else if ("looper" == json_value["type"].asString())
           {
               if ("" == json_value["failure_mode"].asString() || "NONE" == json_value["failure_mode"].asString() || "LOOP" == json_value["failure_mode"].asString())
@@ -445,10 +495,12 @@ void WaypointsGoalNode::spin()
             }else{
               std::string value;
               std::string ns=ros::this_node::getNamespace();
-              if((int)json_value["value"].asString().find("'") == -1)
+              if(json_value.isMember("dynparam_type") && "str" == json_value["dynparam_type"].asString() && ((int)json_value["value"].asString().find("'") == -1))
               {
-                 value = "'" + json_value["value"].asString() + "'";
+                value = "'" + json_value["value"].asString() + "'"; 
               }
+              else 
+                value = json_value["value"].asString();
               std::string system_str = "rosrun dynamic_reconfigure dynparam set /"+ns+json_value["node"].asString()+" "+json_value["param"].asString()+" " + value;
               int system_rtn = system(system_str.c_str());
 
@@ -483,20 +535,6 @@ void WaypointsGoalNode::spin()
               plc_io_on_pub_.publish(msg);
             } else if (json_value["plc_io_cmd"].asString() == "off") {
               plc_io_off_pub_.publish(msg);
-            }
-            waypoints_it_++;
-          }
-          else if ("call_srv" == json_value["type"].asString())  /// TODO: move into rosbridge_driver later
-          {
-            std::string srv_name;
-            std_srvs::Empty srv;
-            srv_name = json_value["srv_name"].asString().c_str();
-            if(ros::service::call(srv_name,srv))
-            {
-              ROS_INFO("Calling service %s in the waypoint", srv_name.c_str());
-            }
-            else{
-              ROS_WARN("Calling %s service failed in the waypoint", srv_name.c_str());
             }
             waypoints_it_++;
           }
@@ -597,6 +635,73 @@ void WaypointsGoalNode::spin()
               move_base_ac_.sendGoal(mb_goal);
 
               state_ = ACTIVE;
+          }
+          else if ("local_marker" == json_value["type"].asString())
+          {
+              geometry_msgs::PoseStamped local_pose_, local_pose_in, local_pose_out;
+              // std::string temp_frame_id;
+              double polar_theta, polar_dist, temp_yaw;
+              double cart_x, cart_y;
+              Eigen::Isometry3d TransformL2R, TransformLocal;
+              std::string coord_;
+              // std_msgs::Float64 msg;
+              // msg.data = atof(json_value["close_enough"].asString().c_str());
+              if(json_value.isMember("coord")){
+                coord_ = json_value["coord"].asString();
+                if("polar" == coord_)
+                {
+                  // temp_frame_id = waypoints_it_->header.frame_id;
+                  polar_dist = waypoints_it_->pose.position.x;
+                  polar_theta = waypoints_it_->pose.position.z;
+                  cart_x = polar_dist * cos((polar_theta/180) * M_PI);
+                  cart_y = polar_dist * sin((polar_theta/180) * M_PI);
+                }
+                else if("cart" == coord_)
+                {
+                  // temp_frame_id = waypoints_it_->header.frame_id;
+                  cart_x = waypoints_it_->pose.position.x;
+                  cart_y = waypoints_it_->pose.position.y;
+                }
+                local_pose_.pose.position.x = cart_x;
+                local_pose_.pose.position.y = cart_y;   
+              }
+              else{
+                local_pose_.pose.position.x = waypoints_it_->pose.position.x;
+                local_pose_.pose.position.y = waypoints_it_->pose.position.y;
+              }
+              local_pose_.pose.position.z = 0;
+              local_pose_.pose.orientation = waypoints_it_->pose.orientation;
+
+              local_marker_sub_ = nh_.subscribe("triangle_pose", 1, &WaypointsGoalNode::scan_marker_sub, this);
+              usleep(200000); // wait for nh_.subscribe to registration if publish latch is false
+              local_pose_.header = waypoints_it_->header;
+              is_user_sub_ = false;
+
+              while (ros::ok() && !is_user_sub_)
+              {
+                  local_marker_pub_.publish(local_pose_);
+                  usleep(10000); // resend after 1s
+                  ros::spinOnce();
+              }
+              local_marker_sub_.shutdown();
+              if (state_ == IDLE)
+              {
+                  continue;
+              }
+        
+              close_enough_ = 0.0;
+              goal_timeout_ = atof(json_value["goal_timeout"].asString().c_str()) ? atof(json_value["goal_timeout"].asString().c_str()) : DBL_MAX;
+              
+              ROS_INFO("Local motion goal: %.2f, %.2f, %.2f",
+                       local_pose_.pose.position.x, local_pose_.pose.position.y,
+                       tf::getYaw(local_pose_.pose.orientation));
+
+              mb_goal.target_pose.header = local_pose_.header;
+              mb_goal.target_pose.header.frame_id = "/map";
+              mb_goal.target_pose.pose = local_pose_.pose; 
+              move_base_ac_.sendGoal(mb_goal);              
+              state_ = ACTIVE;
+              // waypoints_it_++;
           }
 
           else if ("pallet" == json_value["type"].asString())
@@ -718,24 +823,6 @@ void WaypointsGoalNode::spin()
               if (json_value.isMember("max_bez_vel")){
                 max_bez_vel_ = atof(json_value["max_bez_vel"].asString().c_str());
               }
-              
-              if (json_value.isMember("x_tolerance")){
-                x_tolerance_ = atof(json_value["x_tolerance"].asString().c_str());
-              }
-
-              if (json_value.isMember("y_tolerance")){
-                y_tolerance_ = atof(json_value["y_tolerance"].asString().c_str());
-              }
-
-              if (json_value.isMember("yaw_tolerance")){
-                yaw_tolerance_ = atof(json_value["yaw_tolerance"].asString().c_str());
-              }
-
-              if (json_value.isMember("manual_comp")){
-                manual_comp_ = atof(json_value["manual_comp"].asString().c_str());
-              }
-
-              flag_ = false;
               
               //TODO: use matrix for universal cases
               double yaw = tf::getYaw(target_marker.pose.orientation);
@@ -1282,15 +1369,16 @@ void WaypointsGoalNode::waypoint_user_sub(const std_msgs::String::ConstPtr& msg)
 {
   if (waypoints_it_ != waypoints_.end())
   {
-    int pos = msg->data.find(':');
-    if (pos)
+    size_t pos = msg->data.find(':');
+    if (pos != std::string::npos)
     {
       // deal with warn exception (e.g. timeout)
         if (msg->data.substr(0, pos) == "warn" && msg->data.substr(pos + 1, msg->data.length() - pos - 1) == waypoints_it_->name) {
             user_data_ = "warn";
             is_user_sub_ = true;
         }
-        else if (msg->data.substr(0, pos) == waypoints_it_->name)
+        else if (msg->data.substr(0, pos) == waypoints_it_->name
+          || msg->data.substr(0, pos) == "switch")
         {
             user_data_ = msg->data.substr(pos + 1, msg->data.length() - pos - 1);
             is_user_sub_ = true;
@@ -1385,71 +1473,41 @@ void WaypointsGoalNode::line_sub(const geometry_msgs::Pose::ConstPtr& msg)
 
 void WaypointsGoalNode::tail_sub(const geometry_msgs::Pose::ConstPtr& msg)
 {
+  const double x_tolerance = 0.02;
+  const double x_offset_pos = x_offset_pos_;
+  const double x_offset_neg = x_offset_neg_;
+  const double source_u = source_u_;
+  const double target_v = target_v_;
+  const double angular_ratio = angular_ratio_;
+  const double vel_ratio = vel_ratio;
+  const double min_bez_vel = min_bez_vel_;
+  const double max_bez_vel = max_bez_vel_;
   geometry_msgs::Twist cmd_vel;
-  geometry_msgs::Pose2D pr, ps, pt, pu, pv, trans;
+  geometry_msgs::Pose2D pr, ps, pt, pu, pv;
   // std::vector<geometry_msgs::Pose2D> pl;
-  
+
   ps.x = msg->position.x;
   ps.y = msg->position.y;
   ps.theta = tf::getYaw(msg->orientation);
   double ps_tan = tan(ps.theta);
-  if(flag_)
-  {
-    if(flag2_ == 1)
-    {
-      pt.x = tail_.pose.position.x + manual_comp_;
-      ROS_ERROR("X: %f",pt.x);
-    }
-    else if(flag2_ == 2)
-    {
-      pt.x = tail_.pose.position.x - manual_comp_;
-      ROS_ERROR("X: %f, flag: %d",pt.x, flag2_);
-    }
-  }
-  else{
-    pt.x = tail_.pose.position.x;
-  }
+  pt.x = tail_.pose.position.x;
   pt.y = tail_.pose.position.y;
   pt.theta = tf::getYaw(tail_.pose.orientation);
   double pt_tan = tan(pt.theta);
-  double trans_yaw = pt.theta - M_PI_2;
-  trans.x = ps.x * cos(trans_yaw) + ps.y * sin(trans_yaw) - pt.x;
-  trans.y = - ps.x * sin(trans_yaw) + ps.y * cos(trans_yaw) - pt.y;
-  double judge_yaw = atan2(trans.y, trans.x);
-  if(!flag_)
-  { 
-    if(judge_yaw < M_PI_2)
-    {
-      flag2_ = 1;
-    }
-    else if(judge_yaw > M_PI_2)
-    {
-      flag2_ = 2;
-    }
-    flag_ = true;
-  }
+
   pr.x = (ps_tan * ps.x - pt_tan * pt.x - ps.y + pt.y) / (ps_tan - pt_tan);
   pr.y = ps_tan * (pr.x - ps.x) + ps.y;
   pr.theta = atan2(ps.y - pt.y, ps.x - pt.x);
   double pr_len = sqrt(pow(ps.x - pt.x, 2) + pow(ps.y - pt.y, 2));
   double px_len = pr_len * cos(pr.theta -pt.theta);
-  // ROS_ERROR("x: %f, y: %f, judge_yaw: %f", trans.x,trans.y,judge_yaw,pr.theta);
 
-  // if (fabs(px_len) < x_tolerance) {
-  //   cmd_vel_pub_.publish(cmd_vel);
-  //   is_user_sub_ = true;
-  //   return;
-  // }
-
-  if((fabs(ps.x - pt.x) <= x_tolerance_) 
-      && (fabs(ps.y - pt.y) <= y_tolerance_) && (angles::shortest_angular_distance(ps.theta, pt.theta) <= yaw_tolerance_))
-  {
+  if (fabs(px_len) < x_tolerance) {
     cmd_vel_pub_.publish(cmd_vel);
     is_user_sub_ = true;
     return;
   }
 
-  double px_offset = (pr_len > (x_offset_pos_ + x_offset_neg_)) ? x_offset_pos_ : (pr_len - x_offset_neg_);
+  double px_offset = (pr_len > (x_offset_pos + x_offset_neg)) ? x_offset_pos : (pr_len - x_offset_neg);
   double pr_dir = (fabs(pt.theta - pr.theta) > M_PI) ? (2*M_PI - fabs(pt.theta - pr.theta)) : (fabs(pt.theta - pr.theta));
   if (pr_dir < M_PI_2) {
     pr_len = - pr_len;
@@ -1462,10 +1520,10 @@ void WaypointsGoalNode::tail_sub(const geometry_msgs::Pose::ConstPtr& msg)
   // bool dir2 = (fabs(pt_tan) < 1) ? ((fabs(pt.theta) < M_PI_2) ? (pr.x > pt.x) : (pt.x > pr.x)) : ((pt.theta > 0) ? (pr.y > pt.y) : (pt.y > pr.y));
   // bool dir0 = (dir1) ? (!dir2) : (dir2);
 
-  double ps_offset = (pr_len - px_offset) * source_u_;
+  double ps_offset = (pr_len - px_offset) * source_u;
   pu.x = ps.x + ps_offset * cos(ps.theta);
   pu.y = ps.y + ps_offset * sin(ps.theta);
-  double pt_offset = (pr_len - px_offset) * target_v_;
+  double pt_offset = (pr_len - px_offset) * target_v;
   pv.x = pt.x - pt_offset * cos(pt.theta);
   pv.y = pt.y - pt_offset * sin(pt.theta);
 
@@ -1496,11 +1554,11 @@ void WaypointsGoalNode::tail_sub(const geometry_msgs::Pose::ConstPtr& msg)
   if (dyaw < -M_PI) dyaw += M_PI*2;
   // ROS_ERROR("ps.theta: %f, dyaw_temp: %f, dyaw2: %f, dyaw: %f", ps.theta, dyaw_temp, dyaw2, dyaw);
   // double dyaw = atan2(ddy, ddx) - ps.theta;
-  
+
   cmd_vel.linear.x = (pr_len > 0 ? 1 : -1);
-  cmd_vel.angular.z = fabs(cmd_vel.linear.x / dxy) * dyaw * angular_ratio_;
+  cmd_vel.angular.z = fabs(cmd_vel.linear.x / dxy) * dyaw * angular_ratio;
   double cmd_vel_factor = (1 / sqrt(pow(cmd_vel.linear.x, 2) + pow(cmd_vel.angular.z * wheel_base_, 2)));
-  cmd_vel_factor *= fmin(vel_ratio_ * fmax(fabs(px_len) - x_offset_pos_, 0) + min_bez_vel_, max_bez_vel_);
+  cmd_vel_factor *= fmin(vel_ratio * fmax(fabs(px_len) - x_offset_pos, 0) + min_bez_vel, max_bez_vel);
   cmd_vel.linear.x *= cmd_vel_factor;
   cmd_vel.angular.z *= cmd_vel_factor;
 

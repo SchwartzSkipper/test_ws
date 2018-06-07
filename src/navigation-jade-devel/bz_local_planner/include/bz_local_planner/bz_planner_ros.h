@@ -31,6 +31,9 @@
 #include <base_local_planner/goal_functions.h>
 
 #include <pluginlib/class_list_macros.h>
+#include <eigen_conversions/eigen_msg.h>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 
 namespace bz_local_planner {
 
@@ -65,6 +68,15 @@ private:
     bool goalReachEucDis();
     bool goalReachXYYaw();
     bool goalReachEucDisYaw();
+	bool goalReachLocal();
+	bool goalReachLocalinMap();
+	bool goalReachSum(int reach_level);
+	//relocation functions:
+	bool getLocalPose(tf::Stamped<tf::Pose>& tf_pose);
+	bool getLocalPose();
+	bool getLocalGoal(tf::Stamped<tf::Pose>& tf_goal);
+	bool getLocalGoal();
+	bool getLocalStatus();
 private:
 	std::string odom_topic_;
 	std::mutex dyn_params_mutex_;
@@ -74,16 +86,19 @@ private:
 	ros::Publisher bz_plan_pub_;
 	ros::Publisher bz_ctrl_points_pub_;
 	ros::Publisher local_plan_pub_;
-	ros::Subscriber relocation_pose_sub_;
 	base_local_planner::LocalPlannerUtil planner_util_;
 	base_local_planner::OdometryHelperRos odom_helper_;
 	bz_local_planner::PoseHelperRos pose_helper_;
+	bz_local_planner::PoseHelperRos goal_helper_;  //temporary use, todo: move to base_local_planner
 	tf::Stamped<tf::Pose> current_pose_;
+	tf::Stamped<tf::Pose> relocation_pose_tf_, relocation_goal_tf_;
 	tf::TransformListener* tf_;
 	costmap_2d::Costmap2DROS* costmap_ros_;
 	geometry_msgs::PoseStamped goal_;
 	std::string global_frame_;
 	geometry_msgs::PoseStamped final_goal_;
+	//relocation poses:
+	geometry_msgs::PoseStamped relocation_goal_, relocation_pose_;
 	bool initialized_;
 	// dynamic params
 	double sim_time_;
@@ -96,8 +111,10 @@ private:
 	double yaw_tolerance_;
 	double max_vel_x_;
 	double min_vel_x_;
+	double angular_ratio_;
+	double vel_ratio_;
 	double minimum_dist_;
-
+	double wheel_base_;
 	/*
 	goal reach level:
 	0: by bezier curve length
@@ -113,9 +130,6 @@ private:
 	double x_offset_neg_;
 	double source_u_;
 	double target_v_;
-	double angular_ratio_;
-	double vel_ratio_;
-	double wheel_base_;
 
 	double current_tolerance_;
 
@@ -125,7 +139,14 @@ private:
 
 	//relocation params
 	std::string relocation_pose_topic_;
+	std::string relocation_frame_;
 	bool relocation_mode_;
+	bool relocation_gained_;
+	enum ud_enum{
+		RELOCATION,
+		NAVIGATION
+	}motion_status_;
+
 	//The selection of forward or backward movement after the initialization of global plan 
 	Bzstruct select;
 };

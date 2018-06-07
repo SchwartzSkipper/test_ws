@@ -1,5 +1,6 @@
 build
 devel
+install
 *~
 .*
 !.catkin_workspace
@@ -8,4 +9,3 @@ devel
 CMakeLists.txt.user*
 *-Default
 *-Debug
-*-Releasesss

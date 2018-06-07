@@ -1,15 +1,16 @@
 /*********************************************************************
 * Author: GrayLoo
-*********************************************************************/
+********************************************************************/
 
-#include <bz_local_planner/bz_planner_ros.h>
+#include <bz_local_planner/bz_planner_ros.h> 
 
 PLUGINLIB_EXPORT_CLASS(bz_local_planner::BZPlannerROS, nav_core::BaseLocalPlanner)
 
 namespace bz_local_planner{
 
 BZPlannerROS::BZPlannerROS() : odom_helper_("odom"),
-                               pose_helper_("belt_pose"),
+                               pose_helper_("target_mark"),
+                               goal_helper_("relocation_goal"),
                                initialized_(false),
                                sim_time_(1.7),
                                sim_granularity_(0.025),
@@ -33,8 +34,10 @@ BZPlannerROS::BZPlannerROS() : odom_helper_("odom"),
                                minimum_dist_(0.1),
                                convert_global_(false),
                                final_goal_lock_(false),
-                               relocation_pose_topic_("belt_pose"),
-                               relocation_mode_(false)                   
+                               relocation_pose_topic_("triangle_pose"),
+                               relocation_mode_(false),
+                               relocation_frame_("map"),
+                               motion_status_(NAVIGATION)
 {}
 
 BZPlannerROS::~BZPlannerROS()
@@ -66,6 +69,7 @@ void BZPlannerROS::initialize(std::string name,
         {
             pose_helper_.setPoseTopic(relocation_pose_topic_);
         }
+        goal_helper_.setPoseTopic("relocation_goal");
         dyn_server_ = std::make_shared<dynamic_reconfigure::Server<bz_local_planner::BZPlannerConfig>>(pnh);
         dynamic_reconfigure::Server<bz_local_planner::BZPlannerConfig>::CallbackType cb;
         cb = boost::bind(&BZPlannerROS::reconfigureCB, this, _1, _2);
@@ -133,7 +137,27 @@ bool BZPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped>& plan)
             return false; //exit(1);
         }
         bezierParams(select, start_global_pose, final_goal_);
-
+        
+        // pose helper provides  a goal in local frame, which is converted into map.
+        if(pose_helper_.getPoseStatus() && motion_status_ == RELOCATION)
+        {
+            ROS_INFO("Controlling in relocation mode");
+            if(relocation_frame_ == "base_footprint")
+            {
+                if(getLocalGoal())
+                {
+                    goal_ = relocation_goal_;
+                }
+            }
+            
+            if(relocation_frame_ == "map")
+            {
+                if(getLocalPose())
+                {
+                    goal_ = relocation_pose_;
+                }
+            }
+        }
         return true;
     }
     return false;
@@ -178,43 +202,53 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     std::vector<geometry_msgs::PoseStamped> transformed_plan;
     std::vector<geometry_msgs::Pose2D> bz_ctrl_points;
     geometry_msgs::PoseStamped pose, global_pose;
-
-    if(pose_helper_.getPoseStatus() && relocation_mode_)
+    tf::Stamped<tf::Pose> t1,t2;
+    if (!costmap_ros_->getRobotPose(current_pose_))
     {
-        geometry_msgs::PoseStamped relocation_goal,origin_pose;
-        pose_helper_.getPose(relocation_goal);
-        if(relocation_goal.header.frame_id == "base_footprint")
-        {
-            origin_pose.header.frame_id = relocation_goal.header.frame_id;
-            origin_pose.pose.position.x = 0;
-            origin_pose.pose.position.y = 0;
-            origin_pose.pose.position.z = 0;
-            origin_pose.pose.orientation.z = 0;
-            origin_pose.pose.orientation.w = 1;
-        }
-        else{
-            ROS_WARN("The frame of relocation goal is not valid");
-            return false;
-        }
-        ROS_INFO("Relocation pose received, executing bezier velocity");
-            if (!calcBezierVel(cmd_vel, bz_ctrl_points, origin_pose, relocation_goal)) {
-            return false;
-        }        
+        ROS_ERROR("Could not get robot pose");
+        return false;
     }
-    else{
 
-        if (!costmap_ros_->getRobotPose(current_pose_))
+    if(!planner_util_.getLocalPlan(current_pose_, transformed_plan))
+    {
+        ROS_ERROR("Could not transform local plan");
+        return false;
+    }
+
+    tf::poseStampedTFToMsg(current_pose_, pose);
+    try
+    {
+        tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
+        tf_->transformPose("/map", ros::Time(0), pose, global_frame_, global_pose); 
+    }
+    catch(tf::TransformException& ex)
+    {
+        ROS_ERROR("%s", ex.what());
+        return false; //exit(1);
+    }
+    if(motion_status_ == RELOCATION){
+        if(getLocalPose() && relocation_frame_ == "map")
         {
-            ROS_ERROR("Could not get robot pose");
-            return false;
+            goal_ = relocation_pose_;
+            pose_helper_.pose_gained_ =false;
         }
 
-        if(!planner_util_.getLocalPlan(current_pose_, transformed_plan))
+        if(getLocalGoal())
         {
-            ROS_ERROR("Could not transform local plan");
-            return false;
+            if(getLocalPose()){
+                global_pose = relocation_pose_;
+                goal_ = relocation_goal_;
+                pose_helper_.pose_gained_ = false;
+                goal_helper_.pose_gained_ = false;        
+            }
+            else{
+                ROS_ERROR("Can't get relocation pose while relocation goal received");
+                return false;
+            }
         }
-
+    }
+    if(motion_status_ == NAVIGATION)
+    {
         if(!final_goal_lock_ && convert_global_)
         {
             if(!globalPlanConversion(goal_, transformed_plan, select)){
@@ -226,24 +260,19 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
         {
             goal_ = final_goal_;
         }
-
-        tf::poseStampedTFToMsg(current_pose_, pose);
-        try
-        {
-            tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
-            tf_->transformPose("/map", ros::Time(0), pose, global_frame_, global_pose); 
-        }
-        catch(tf::TransformException& ex)
-        {
-            ROS_ERROR("%s", ex.what());
-            return false; //exit(1);
-        }
-        std::lock_guard<std::mutex> lk(dyn_params_mutex_);
-
-        if (!calcBezierVel(cmd_vel, bz_ctrl_points, global_pose, goal_)) {
-            return false;
-        }
     }
+    std::lock_guard<std::mutex> lk(dyn_params_mutex_);
+    tf::Pose gpose,ppose;
+    tf::poseMsgToTF(global_pose.pose, ppose);
+    tf::poseMsgToTF(goal_.pose, gpose);
+    double pyaw_angle = tf::getYaw(ppose.getRotation());
+    double gyaw_angle = tf::getYaw(gpose.getRotation());
+    ROS_ERROR("BEZpose: x: %.2lf, y: %.2lf, yaw: %.2lf", global_pose.pose.position.x, global_pose.pose.position.y, pyaw_angle);
+    ROS_ERROR("BEZgoal: x: %.2lf, y: %.2lf, yaw: %.2lf", goal_.pose.position.x, goal_.pose.position.y, gyaw_angle);
+    if (!calcBezierVel(cmd_vel, bz_ctrl_points, global_pose, goal_)) {
+        return false;
+    }
+    
     publishBezierPlan(bz_ctrl_points);
     publishBezierCtrlPoints(bz_ctrl_points);
     base_local_planner::Trajectory result_traj;
@@ -251,38 +280,43 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     double cost = calcObstacleCost(result_traj, costmap_ros_->getRobotFootprint());
     result_traj.cost_ = cost;
     publishLocalPlan(result_traj);
-    ROS_INFO("Vel x: %.2lf, y: %.2lf, yaw: %.2lf, cost: %.2lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z, cost);
-    if (cost < 0)
-    {
-        // still return true but command to stop, 
-        // since we do not care about the global plan, 
-        // neither do we want global planner to make a new plan
-        cmd_vel.linear.x = 0.0;
-        cmd_vel.linear.y = 0.0;
-        cmd_vel.angular.z = 0.0;
+    ROS_ERROR("Vel x: %.2lf, y: %.2lf, yaw: %.2lf, cost: %.2lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z, cost);
+    if(motion_status_ == NAVIGATION){
+        if (cost < 0)
+        {
+            // still return true but command to stop, 
+            // since we do not care about the global plan, 
+            // neither do we want global planner to make a new plan
+            cmd_vel.linear.x = 0.0;
+            cmd_vel.linear.y = 0.0;
+            cmd_vel.angular.z = 0.0;
+        }
     }
     return true;
 }
 
+
 bool BZPlannerROS::isGoalReached()
 {   
+    tf::Stamped<tf::Pose> t1,t2;
 	std::lock_guard<std::mutex> lk(dyn_params_mutex_);
+
     if (!costmap_ros_->getRobotPose(current_pose_))
     {
-        ROS_ERROR("Could not get robot pose, will stop");
+    ROS_ERROR("Could not get robot pose, will stop");
+    return true;
+    }
+
+    if(goalReachSum(goal_reach_level_))
+    {
         return true;
     }
-	auto goal_reach_func = is_goal_reach_funcs_[goal_reach_level_];
-	if (goal_reach_func())
-	{
-		ROS_INFO("Goal reached, level: %d", goal_reach_level_);
-		return true;
-	}
+
 	return false;
 }
 
 void BZPlannerROS::reconfigureCB(BZPlannerConfig &config, uint32_t level)
-{
+{   int temp;
 	sim_time_ = config.sim_time;
 	sim_granularity_ = config.sim_granularity;
 	stop_time_buffer_ = config.stop_time_buffer;
@@ -304,7 +338,9 @@ void BZPlannerROS::reconfigureCB(BZPlannerConfig &config, uint32_t level)
     source_u_ = config.current_ctrl;
     target_v_ = config.goal_ctrl;
     relocation_pose_topic_ = config.relocation_pose_topic;
-    relocation_mode_ = config.relocation_mode;
+    relocation_frame_ = config.relocation_frame;
+    motion_status_ = static_cast<BZPlannerROS::ud_enum>(config.motion_status);
+    pose_helper_.setPoseTopic(relocation_pose_topic_);
 	ROS_INFO("Updated bz_local_planner dynamic parameters");
 }
 
@@ -557,6 +593,194 @@ bool BZPlannerROS::goalReachEucDisYaw()
 		return true;
 	}
 	return false;
+}
+
+bool BZPlannerROS::goalReachLocal()
+{   
+    tf::Stamped<tf::Pose> goal_pose, present_pose;
+    if(getLocalGoal(goal_pose) && getLocalPose(present_pose)){
+        double goal_x = goal_pose.getOrigin().getX();  
+        double goal_y = goal_pose.getOrigin().getY();
+        double goal_th = tf::getYaw(goal_pose.getRotation());
+        if (base_local_planner::getGoalPositionDistance(present_pose,goal_x,goal_y) <= xy_tolerance_
+            && base_local_planner::getGoalOrientationAngleDifference(present_pose, goal_th) <= yaw_tolerance_)
+        {
+            return true;
+        }
+    }
+	return false;
+}
+
+bool BZPlannerROS::goalReachLocalinMap()
+{   
+    tf::Stamped<tf::Pose> goal_pose, present_pose;
+        tf::poseStampedMsgToTF(goal_,goal_pose);
+        double goal_x = goal_pose.getOrigin().getX();  
+        double goal_y = goal_pose.getOrigin().getY();
+        double goal_th = tf::getYaw(goal_pose.getRotation());
+        if (base_local_planner::getGoalPositionDistance(present_pose,goal_x,goal_y) <= xy_tolerance_
+            && base_local_planner::getGoalOrientationAngleDifference(present_pose, goal_th) <= yaw_tolerance_)
+        {
+            return true;
+        }
+    
+	return false;
+}
+
+bool BZPlannerROS::goalReachSum(int reach_level)
+{
+    switch(motion_status_)
+    {
+        case RELOCATION :{
+            if(relocation_frame_ == "map")
+            {
+                if(goalReachLocalinMap()){
+                    ROS_INFO("Goal reached in relocation mode, with goal and current pose converted into frame map");
+                    return true;
+                }
+            }
+            if(relocation_frame_ == "base_footprint")
+            {
+                if(goalReachLocal()){
+                    ROS_INFO("Goal reached in relocation mode");
+                    return true;
+                }
+            }
+            break;
+        }
+        case NAVIGATION :{
+            auto goal_reach_func = is_goal_reach_funcs_[reach_level];
+            if(goal_reach_func())
+            {
+                ROS_INFO("Goal reached in navigation mode, level: %d",reach_level);
+                return true;
+            }
+            break;
+        }
+        default :{
+            ROS_ERROR("Motion status not available, exit now");
+            return false;
+            break;
+        }
+    }
+    return false;
+}
+
+bool BZPlannerROS::getLocalGoal(tf::Stamped<tf::Pose>& tf_goal)
+{
+    if(goal_helper_.getPoseStatus())
+    {
+        goal_helper_.getPose(relocation_goal_);
+        tf::poseStampedMsgToTF(relocation_goal_,tf_goal);
+        relocation_mode_ = true;
+        return true;
+        ROS_INFO("Received relocation goal, executing relocation mode now");
+    }
+    else{
+        return false;
+    }
+}
+
+bool BZPlannerROS::getLocalGoal()
+{   tf::Stamped<tf::Pose> t1;
+    if(getLocalGoal(t1))
+    {
+        return true;
+        ROS_INFO("Received relocation goal, executing relocation mode now");
+    }
+    else{
+        return false;
+    }
+}
+
+bool BZPlannerROS::getLocalPose(tf::Stamped<tf::Pose>& tf_pose)
+{   
+    if(getLocalPose())
+    {
+        tf::poseStampedMsgToTF(relocation_pose_, tf_pose);
+        return true;
+    }
+    return false;
+}
+
+bool BZPlannerROS::getLocalPose()
+{   
+    geometry_msgs::PoseStamped temp1,temp2, pose_in_, pose_out_;
+    Eigen::Isometry3d TransformL2R, TransformR2L;
+    pose_helper_.getPose(pose_in_);
+    if(pose_helper_.getPoseStatus())
+    {   
+        // ROS_ERROR("POSE RECEIVED");
+        motion_status_ = RELOCATION;
+        if(relocation_frame_ == "map")
+        {
+            try
+            {
+                tf_->waitForTransform(relocation_frame_, pose_in_.header.frame_id, ros::Time(0), ros::Duration(5.0));
+                tf_->transformPose(relocation_frame_, ros::Time(0), pose_in_, pose_in_.header.frame_id, pose_out_); 
+            }
+            catch(tf::TransformException& ex)
+            {
+                ROS_ERROR("%s", ex.what());
+                return false; //exit(1);
+            }
+            relocation_pose_ = pose_out_;
+            return true;
+        }
+
+        if(relocation_frame_ == "base_footprint")
+        {   if(pose_in_.header.frame_id != "base_footprint")
+            {
+                try
+                {
+                    tf_->waitForTransform(relocation_frame_, pose_in_.header.frame_id, ros::Time(0), ros::Duration(5.0));
+                    tf_->transformPose(relocation_frame_, ros::Time(0), pose_in_, pose_in_.header.frame_id, pose_out_); 
+                }
+                catch(tf::TransformException& ex)
+                {
+                    ROS_ERROR("%s", ex.what());
+                    return false; //exit(1);
+                }
+            }
+            tf::Pose pose;
+            tf::Quaternion trans_quad;
+            tf::Transform footprint2local_trans, temp_inv;
+            footprint2local_trans.setOrigin(tf::Vector3(pose_out_.pose.position.x, pose_out_.pose.position.y, 0.0));
+            tf::poseMsgToTF(pose_out_.pose, pose);
+            double yaw = tf::getYaw(pose.getRotation());
+            trans_quad = pose.getRotation();
+            footprint2local_trans.setRotation(trans_quad);
+            temp_inv = footprint2local_trans.inverse();
+            temp2.pose.position.x = temp_inv.getOrigin().getX();
+            temp2.pose.position.y = temp_inv.getOrigin().getY();
+            temp2.pose.position.z = temp_inv.getOrigin().getZ();
+            tf::quaternionTFToMsg(trans_quad, temp2.pose.orientation);
+            ROS_ERROR("pose_in: x: %.2lf, y: %.2lf, yaw: %.2lf", pose_in_.pose.position.x, pose_in_.pose.position.y, yaw);
+            // tf::poseMsgToEigen(pose_in_.pose,TransformR2L);
+            // TransformL2R = TransformR2L.inverse();
+            // tf::poseEigenToMsg(TransformL2R,temp2.pose);
+            temp2.header = pose_out_.header;
+
+            relocation_pose_ = temp2;
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool BZPlannerROS::getLocalStatus()
+{
+    tf::Stamped<tf::Pose> t1,t2;
+    if(goal_helper_.getPoseStatus() && pose_helper_.getPoseStatus())
+    {
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 }; // namespace

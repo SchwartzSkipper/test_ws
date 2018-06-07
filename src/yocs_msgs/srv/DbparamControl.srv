@@ -1,0 +1,17 @@
+# GrayLoo, 20171025
+# dbparam control
+
+# control: 
+# 1. insert: git checkout -b params
+# 2. delete: git branch -D params
+# 3. select: git branch
+# 4. update: git checkout params
+# 5. push:   TODO: git push 
+# 6. fix:    TODO: git reset/git init
+
+string control
+string params
+---
+bool success
+string message
+string[] branches

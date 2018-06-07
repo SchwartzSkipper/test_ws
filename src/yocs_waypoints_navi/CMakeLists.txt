@@ -18,9 +18,8 @@ include_directories(include
                     ${catkin_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME}_node src/waypoints_navi.cpp
-                                    src/main.cpp 
-                                    src/jsoncpp.cpp)
-target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES}
+                                    src/main.cpp src/jsoncpp.cpp)
+target_link_libraries(${PROJECT_NAME}_node  ${catkin_LIBRARIES}
                                            ${Boost_LIBRARIES})
 add_dependencies(${PROJECT_NAME}_node yocs_msgs_generate_messages_cpp)
 

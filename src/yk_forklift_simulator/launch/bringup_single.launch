@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-	<include file="$(find yk_forklift_simulator)/launch/yk_stage_single.launch"/>
-	<include file="$(find yk_forklift_simulator)/launch/map_server.launch"/>
-    <include file="$(find yk_forklift_simulator)/launch/nav_single.launch"/>
-    <include file="$(find yk_forklift_simulator)/launch/rviz.launch"/>
-</launch>

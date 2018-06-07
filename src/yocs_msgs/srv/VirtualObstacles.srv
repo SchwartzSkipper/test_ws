@@ -1,0 +1,9 @@
+# GrayLoo, 20171025
+# virtual obstacles for map_edit
+# circle: 1 point with z = radius > 0;
+# rectangle: 4 points
+
+geometry_msgs/Polygon[] obstacles
+---
+bool success
+string message

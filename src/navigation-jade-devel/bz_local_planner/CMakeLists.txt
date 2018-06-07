@@ -13,6 +13,7 @@ find_package(catkin REQUIRED
             pluginlib
             roscpp
             tf
+            eigen_conversions
         )
 
 find_package(Eigen3 REQUIRED)
@@ -39,7 +40,7 @@ catkin_package(
         roscpp
 )
 
-add_library(bz_local_planner src/bz_planner_ros.cpp)
+add_library(bz_local_planner src/bz_planner_ros.cpp src/pose_helper_ros.cpp)
 add_dependencies(bz_local_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(bz_local_planner ${catkin_LIBRARIES})
 

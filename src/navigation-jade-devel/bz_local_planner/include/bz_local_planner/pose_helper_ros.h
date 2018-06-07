@@ -1,4 +1,4 @@
-/*********************************************************************
+/********************************************************************
  *
  * Software License Agreement (BSD License)
  *
@@ -75,6 +75,7 @@ public:
   
   bool getPoseStatus() const { return pose_gained_; }
 
+  friend class BZPlannerROS;
 
 private:
   //odom topic

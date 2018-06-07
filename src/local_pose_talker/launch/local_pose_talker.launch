@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    	<node name="local_pose_talker" pkg="local_pose_talker" type="local_pose_talker_node" output="screen">
+    	</node>
+</launch>

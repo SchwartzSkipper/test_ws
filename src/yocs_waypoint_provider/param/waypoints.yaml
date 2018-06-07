@@ -1,0 +1,15 @@
+waypoints:
+  - name: test
+    coord: cart
+    type: local_marker
+    pose:
+      position:
+        x: 1
+        y: 1
+        z: 0
+      orientation:
+        x: 0
+        y: 0
+        z: 0.7071
+        w: 0.7071
+trajectories:

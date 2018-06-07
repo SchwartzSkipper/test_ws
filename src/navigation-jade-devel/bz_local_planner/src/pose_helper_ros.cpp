@@ -1,4 +1,4 @@
-/*********************************************************************
+/********************************************************************
  *
  * Software License Agreement (BSD License)
  *
@@ -75,7 +75,7 @@ void PoseHelperRos::setPoseTopic(std::string pose_topic)
     if( pose_topic_ != "" )
     {
       ros::NodeHandle gn;
-      pose_sub_ = gn.subscribe<geometry_msgs::PoseStamped>( pose_topic_, 1, boost::bind( &PoseHelperRos::poseCallback, this, _1 ));
+      pose_sub_ = gn.subscribe<geometry_msgs::PoseStamped>( pose_topic_, 1000, boost::bind( &PoseHelperRos::poseCallback, this, _1 ));
     }
     else
     {

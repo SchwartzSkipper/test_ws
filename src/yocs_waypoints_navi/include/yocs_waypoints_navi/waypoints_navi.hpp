@@ -28,9 +28,9 @@
 #include <yocs_msgs/WaypointList.h>
 #include <yocs_msgs/NavgationCtrlService.h>
 #include <scheduling_msgs/ReportNavigationControlStatus.h>
-#include <std_srvs/Empty.h>
-#include <angles/angles.h>
 #include <eigen_conversions/eigen_msg.h>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 
 namespace yocs
 {
@@ -89,12 +89,6 @@ private:
 	double wheel_base_;
   double min_bez_vel_;
   double max_bez_vel_;
-  double x_tolerance_;
-  double y_tolerance_;
-  double yaw_tolerance_;
-  double manual_comp_;
-  bool flag_;
-  int flag2_;
 
   std::string failure_mode_;
   std::string robot_frame_;
@@ -143,6 +137,9 @@ private:
   ros::Publisher plc_io_off_pub_;
   ros::Publisher gui_p_pub_;
   ros::Publisher gui_q_pub_;
+
+  ros::Subscriber local_marker_sub_;
+  ros::Publisher local_marker_pub_;
 
   ros::ServiceServer nav_ctrl_service_;
 
