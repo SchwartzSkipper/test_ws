@@ -37,7 +37,8 @@ BZPlannerROS::BZPlannerROS() : odom_helper_("odom"),
                                relocation_pose_topic_("triangle_pose"),
                                relocation_mode_(false),
                                relocation_frame_("map"),
-                               motion_status_(NAVIGATION)
+                               motion_status_(NAVIGATION),
+                               test_vel_(true)
 {}
 
 BZPlannerROS::~BZPlannerROS()
@@ -86,6 +87,7 @@ void BZPlannerROS::initialize(std::string name,
         is_goal_reach_funcs_.push_back(f);
         f = std::bind(&BZPlannerROS::goalReachEucDisYaw, this);
         is_goal_reach_funcs_.push_back(f);
+        check_quad_num_ = 0;
 
         initialized_ = true;
         ROS_INFO("Initialized bezier local planner.");
@@ -146,6 +148,7 @@ bool BZPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped>& plan)
             {
                 if(getLocalGoal())
                 {
+                    ROS_ERROR("HA2");
                     goal_ = relocation_goal_;
                 }
             }
@@ -216,39 +219,54 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     }
 
     tf::poseStampedTFToMsg(current_pose_, pose);
-    try
-    {
-        tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
-        tf_->transformPose("/map", ros::Time(0), pose, global_frame_, global_pose); 
-    }
-    catch(tf::TransformException& ex)
-    {
-        ROS_ERROR("%s", ex.what());
-        return false; //exit(1);
-    }
-    if(motion_status_ == RELOCATION){
-        if(getLocalPose() && relocation_frame_ == "map")
-        {
-            goal_ = relocation_pose_;
-            pose_helper_.pose_gained_ =false;
-        }
 
-        if(getLocalGoal())
+    if(motion_status_ == RELOCATION){
+        if(getLocalPose())
         {
-            if(getLocalPose()){
-                global_pose = relocation_pose_;
-                goal_ = relocation_goal_;
-                pose_helper_.pose_gained_ = false;
-                goal_helper_.pose_gained_ = false;        
+            if(relocation_frame_ == "map")
+            {
+                try
+                {
+                    tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
+                    tf_->transformPose("/map", ros::Time(0), pose, global_frame_, global_pose); 
+                }
+                catch(tf::TransformException& ex)
+                {
+                    ROS_ERROR("%s", ex.what());
+                    return false; //exit(1);
+                }
+                goal_ = relocation_pose_;
+                pose_helper_.pose_gained_ =false;       
             }
-            else{
-                ROS_ERROR("Can't get relocation pose while relocation goal received");
-                return false;
+
+            if(relocation_frame_ == "base_footprint" && getLocalGoal())
+            {
+                if(getLocalPose())
+                {   ROS_ERROR("HA3");
+                    goal_ = relocation_goal_;
+                    global_pose = relocation_pose_;
+                    pose_helper_.pose_gained_ = false;
+                    // goal_helper_.pose_gained_ = false;
+                }
+                else{
+                    ROS_ERROR("Can't get relocation pose while relocation goal received");
+                    return false;  //return or not
+                }
             }
         }
     }
     if(motion_status_ == NAVIGATION)
     {
+        try
+        {
+            tf_->waitForTransform("/map", global_frame_, ros::Time(0), ros::Duration(5.0));
+            tf_->transformPose("/map", ros::Time(0), pose, global_frame_, global_pose); 
+        }
+        catch(tf::TransformException& ex)
+        {
+            ROS_ERROR("%s", ex.what());
+            return false; //exit(1);
+        }
         if(!final_goal_lock_ && convert_global_)
         {
             if(!globalPlanConversion(goal_, transformed_plan, select)){
@@ -281,6 +299,12 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
     result_traj.cost_ = cost;
     publishLocalPlan(result_traj);
     ROS_ERROR("Vel x: %.2lf, y: %.2lf, yaw: %.2lf, cost: %.2lf", cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z, cost);
+    if(test_vel_)
+    {
+        cmd_vel.linear.x = 0.0;
+        cmd_vel.linear.y = 0.0;
+        cmd_vel.angular.z = 0.0;
+    }
     if(motion_status_ == NAVIGATION){
         if (cost < 0)
         {
@@ -341,6 +365,7 @@ void BZPlannerROS::reconfigureCB(BZPlannerConfig &config, uint32_t level)
     relocation_frame_ = config.relocation_frame;
     motion_status_ = static_cast<BZPlannerROS::ud_enum>(config.motion_status);
     pose_helper_.setPoseTopic(relocation_pose_topic_);
+    test_vel_ = config.test_vel;
 	ROS_INFO("Updated bz_local_planner dynamic parameters");
 }
 
@@ -640,7 +665,7 @@ bool BZPlannerROS::goalReachSum(int reach_level)
                 }
             }
             if(relocation_frame_ == "base_footprint")
-            {
+            {   ROS_ERROR("ha1");
                 if(goalReachLocal()){
                     ROS_INFO("Goal reached in relocation mode");
                     return true;
@@ -707,29 +732,22 @@ bool BZPlannerROS::getLocalPose()
 {   
     geometry_msgs::PoseStamped temp1,temp2, pose_in_, pose_out_;
     Eigen::Isometry3d TransformL2R, TransformR2L;
-    pose_helper_.getPose(pose_in_);
+    std::vector<geometry_msgs::PoseStamped> detect_invalid_pose_(5);
     if(pose_helper_.getPoseStatus())
     {   
-        // ROS_ERROR("POSE RECEIVED");
-        motion_status_ = RELOCATION;
-        if(relocation_frame_ == "map")
-        {
-            try
-            {
-                tf_->waitForTransform(relocation_frame_, pose_in_.header.frame_id, ros::Time(0), ros::Duration(5.0));
-                tf_->transformPose(relocation_frame_, ros::Time(0), pose_in_, pose_in_.header.frame_id, pose_out_); 
-            }
-            catch(tf::TransformException& ex)
-            {
-                ROS_ERROR("%s", ex.what());
-                return false; //exit(1);
-            }
-            relocation_pose_ = pose_out_;
-            return true;
-        }
 
-        if(relocation_frame_ == "base_footprint")
-        {   if(pose_in_.header.frame_id != "base_footprint")
+        pose_helper_.getPose(pose_in_);
+        //invalid pose detection
+        if(checkQuaternion(pose_in_) >= 5)
+        {   
+            ROS_ERROR("Can't get robot pose in the relocation frame");
+            return false;
+        }
+        else
+        {
+            // ROS_ERROR("POSE RECEIVED");
+            motion_status_ = RELOCATION;
+            if(relocation_frame_ == "map")
             {
                 try
                 {
@@ -741,28 +759,53 @@ bool BZPlannerROS::getLocalPose()
                     ROS_ERROR("%s", ex.what());
                     return false; //exit(1);
                 }
+                relocation_pose_ = pose_out_;
+                return true;
             }
-            tf::Pose pose;
-            tf::Quaternion trans_quad;
-            tf::Transform footprint2local_trans, temp_inv;
-            footprint2local_trans.setOrigin(tf::Vector3(pose_out_.pose.position.x, pose_out_.pose.position.y, 0.0));
-            tf::poseMsgToTF(pose_out_.pose, pose);
-            double yaw = tf::getYaw(pose.getRotation());
-            trans_quad = pose.getRotation();
-            footprint2local_trans.setRotation(trans_quad);
-            temp_inv = footprint2local_trans.inverse();
-            temp2.pose.position.x = temp_inv.getOrigin().getX();
-            temp2.pose.position.y = temp_inv.getOrigin().getY();
-            temp2.pose.position.z = temp_inv.getOrigin().getZ();
-            tf::quaternionTFToMsg(trans_quad, temp2.pose.orientation);
-            ROS_ERROR("pose_in: x: %.2lf, y: %.2lf, yaw: %.2lf", pose_in_.pose.position.x, pose_in_.pose.position.y, yaw);
-            // tf::poseMsgToEigen(pose_in_.pose,TransformR2L);
-            // TransformL2R = TransformR2L.inverse();
-            // tf::poseEigenToMsg(TransformL2R,temp2.pose);
-            temp2.header = pose_out_.header;
 
-            relocation_pose_ = temp2;
-            return true;
+            if(relocation_frame_ == "base_footprint")
+            {   if(pose_in_.header.frame_id != "base_footprint")
+                {
+                    try
+                    {
+                        tf_->waitForTransform(relocation_frame_, pose_in_.header.frame_id, ros::Time(0), ros::Duration(5.0));
+                        tf_->transformPose(relocation_frame_, ros::Time(0), pose_in_, pose_in_.header.frame_id, pose_out_); 
+                    }
+                    catch(tf::TransformException& ex)
+                    {
+                        ROS_ERROR("%s", ex.what());
+                        return false; //exit(1);
+                    }
+                }
+                else{
+                    pose_out_ = pose_in_;
+                }
+                tf::Pose pose;
+                tf::Quaternion trans_quad, inv_quad, origin_quad;
+                tf::Transform footprint2local_trans, temp_inv,origin_trans;
+                origin_quad.setRPY(0.0,0.0,0.0);
+                origin_trans.setOrigin(tf::Vector3(0.0,0.0,0.0));
+                origin_trans.setRotation(origin_quad);
+                footprint2local_trans.setOrigin(tf::Vector3(pose_out_.pose.position.x, pose_out_.pose.position.y, 0.0));
+                tf::poseMsgToTF(pose_out_.pose, pose);
+                double yaw = tf::getYaw(pose.getRotation());
+                trans_quad = pose.getRotation();
+                footprint2local_trans.setRotation(trans_quad);
+                temp_inv = footprint2local_trans.inverseTimes(origin_trans);
+                temp2.pose.position.x = temp_inv.getOrigin().getX();
+                temp2.pose.position.y = temp_inv.getOrigin().getY();
+                temp2.pose.position.z = temp_inv.getOrigin().getZ();
+                inv_quad = temp_inv.getRotation();
+                tf::quaternionTFToMsg(inv_quad, temp2.pose.orientation);
+                ROS_ERROR("pose_in: x: %.2lf, y: %.2lf, yaw: %.2lf", pose_out_.pose.position.x, pose_out_.pose.position.y, yaw);
+                // tf::poseMsgToEigen(pose_in_.pose,TransformR2L);
+                // TransformL2R = TransformR2L.inverse();
+                // tf::poseEigenToMsg(TransformL2R,temp2.pose);
+                temp2.header = pose_out_.header;
+
+                relocation_pose_ = temp2;
+                return true;
+            }
         }
     }
     else
@@ -781,6 +824,35 @@ bool BZPlannerROS::getLocalStatus()
     else{
         return false;
     }
+}
+
+unsigned int BZPlannerROS::checkQuaternion(geometry_msgs::PoseStamped pose)
+{
+    try
+    {
+        tf::assertQuaternionValid(pose.pose.orientation);
+    }
+    catch(tf::TransformException& ex)
+    {   
+        ++check_quad_num_;
+        ROS_ERROR("%s, malformed times:%u", ex.what(),check_quad_num_);
+        return check_quad_num_;
+    }
+    check_quad_num_ = 0;
+}
+
+bool BZPlannerROS::checkQuaternion(geometry_msgs::PoseStamped pose)
+{
+    try
+    {
+        tf::assertQuaternionValid(pose.pose.orientation);
+    }
+    catch(tf::TransformException& ex)
+    {   
+        ROS_ERROR("%s, malformed times:%u", ex.what(),check_quad_num_);
+        return false;
+    }
+    return true;
 }
 
 }; // namespace

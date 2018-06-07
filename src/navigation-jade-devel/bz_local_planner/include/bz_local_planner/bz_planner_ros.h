@@ -77,6 +77,9 @@ private:
 	bool getLocalGoal(tf::Stamped<tf::Pose>& tf_goal);
 	bool getLocalGoal();
 	bool getLocalStatus();
+	//check quaternion valid or not:
+	unsigned int checkQuaternion(geometry_msgs::PoseStamped pose);
+	bool checkQuaternion(geometry_msgs::PoseStamped pose);
 private:
 	std::string odom_topic_;
 	std::mutex dyn_params_mutex_;
@@ -115,6 +118,7 @@ private:
 	double vel_ratio_;
 	double minimum_dist_;
 	double wheel_base_;
+	bool test_vel_;
 	/*
 	goal reach level:
 	0: by bezier curve length
@@ -149,6 +153,8 @@ private:
 
 	//The selection of forward or backward movement after the initialization of global plan 
 	Bzstruct select;
+	//the number of quaternions malformed
+	unsigned int check_quad_num_;	
 };
 
 }; // namespace
