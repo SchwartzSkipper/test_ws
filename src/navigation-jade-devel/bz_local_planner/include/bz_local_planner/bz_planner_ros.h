@@ -80,6 +80,8 @@ private:
 	//check quaternion valid or not:
 	unsigned int checkQuaternion(const geometry_msgs::PoseStamped& pose);
 	bool checkQuaternionOnce(const geometry_msgs::PoseStamped& pose);
+	//listening tf 
+	bool getLocalPosebyTf(const std::string& local_frame_id, geometry_msgs::PoseStamped& local_pose_by_tf);
 private:
 	std::string odom_topic_;
 	std::mutex dyn_params_mutex_;
@@ -156,6 +158,8 @@ private:
 	Bzstruct select;
 	//the number of quaternions malformed
 	unsigned int check_quad_num_;	
+	//for transform listener
+	std::string local_frame_id_;
 };
 
 }; // namespace

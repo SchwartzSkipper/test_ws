@@ -36,6 +36,7 @@ BZPlannerROS::BZPlannerROS() : odom_helper_("odom"),
                                final_goal_lock_(false),
                                relocation_pose_topic_("triangle_pose"),
                                relocation_mode_(false),
+                               local_frame_id_("base_local"),
                                relocation_frame_("map"),
                                motion_status_(NAVIGATION),
                                test_vel_(true)
@@ -363,6 +364,7 @@ void BZPlannerROS::reconfigureCB(BZPlannerConfig &config, uint32_t level)
     target_v_ = config.goal_ctrl;
     relocation_pose_topic_ = config.relocation_pose_topic;
     relocation_frame_ = config.relocation_frame;
+    local_frame_id_ = config.local_frame_id;
     motion_status_ = static_cast<BZPlannerROS::ud_enum>(config.motion_status);
     pose_helper_.setPoseTopic(relocation_pose_topic_);
     test_vel_ = config.test_vel;
@@ -738,6 +740,11 @@ bool BZPlannerROS::getLocalPose()
     geometry_msgs::PoseStamped temp1,temp2, pose_in_, pose_out_;
     Eigen::Isometry3d TransformL2R, TransformR2L;
     std::vector<geometry_msgs::PoseStamped> detect_invalid_pose_(5);
+    if(!(pose_helper_.getPoseStatus() || getLocalPosebyTf(local_frame_id_, pose_out_)))
+    {
+        return false;
+    }
+
     if(pose_helper_.getPoseStatus())
     {   
 
@@ -816,14 +823,14 @@ bool BZPlannerROS::getLocalPose()
                 temp2.header = pose_out_.header;
 
                 relocation_pose_ = temp2;
-                return true;
             }
         }
     }
-    else
+    if(getLocalPosebyTf(local_frame_id_, pose_out_))
     {
-        return false;
+        relocation_pose_ = pose_out_;
     }
+    return true;
 }
 
 bool BZPlannerROS::getLocalStatus()
@@ -833,9 +840,7 @@ bool BZPlannerROS::getLocalStatus()
     {
         return true;
     }
-    else{
-        return false;
-    }
+    return false;
 }
 
 unsigned int BZPlannerROS::checkQuaternion(const geometry_msgs::PoseStamped& pose)
@@ -865,6 +870,55 @@ bool BZPlannerROS::checkQuaternionOnce(const geometry_msgs::PoseStamped& pose)
         ROS_ERROR("%s, malformed times:%u", ex.what(),check_quad_num_);
         return false;
     }
+    return true;
+}
+
+bool BZPlannerROS::getLocalPosebyTf(const std::string& local_frame_id, geometry_msgs::PoseStamped& local_pose_by_tf)
+{   
+    if(!(relocation_frame_ == "map"||relocation_frame_ == "base_footprint"))
+    {
+        ROS_ERROR("Relocation frame can't be parsed!");
+        return false;
+    }
+    tf::StampedTransform local_tf;
+    geometry_msgs::PoseStamped origin_pose;
+    origin_pose.header.frame_id = local_frame_id;
+    origin_pose.header.stamp = ros::Time::now();
+    origin_pose.pose.position.x = 0.0;
+    origin_pose.pose.position.y = 0.0;
+    origin_pose.pose.position.z = 0.0;
+    origin_pose.pose.orientation.x = 0.0;
+    origin_pose.pose.orientation.y = 0.0;
+    origin_pose.pose.orientation.z = 0.0;
+    origin_pose.pose.orientation.w = 1.0;
+    if(relocation_frame_ == "map")
+    {
+        try
+        {
+            tf_->waitForTransform(relocation_frame_, local_frame_id, ros::Time(0), ros::Duration(5.0));
+            tf_->transformPose(relocation_frame_, ros::Time(0), origin_pose, local_frame_id, local_pose_by_tf); 
+        }
+        catch(tf::TransformException& ex)
+        {
+            ROS_ERROR("%s", ex.what());
+            return false; //exit(1);
+        }
+    }
+    if(relocation_frame_ == "base_footprint")
+    {   
+        origin_pose.header.frame_id = "base_footprint";
+        try
+        {
+            tf_->waitForTransform(local_frame_id, relocation_frame_, ros::Time(0), ros::Duration(5.0));
+            tf_->transformPose(local_frame_id, ros::Time(0), origin_pose, relocation_frame_, local_pose_by_tf); 
+        }
+        catch(tf::TransformException& ex)
+        {
+            ROS_ERROR("%s", ex.what());
+            return false; //exit(1);
+        }
+    }
+
     return true;
 }
 
