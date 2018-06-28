@@ -28,9 +28,6 @@
 #include <yocs_msgs/WaypointList.h>
 #include <yocs_msgs/NavgationCtrlService.h>
 #include <scheduling_msgs/ReportNavigationControlStatus.h>
-#include <eigen_conversions/eigen_msg.h>
-#include <Eigen/Core>
-#include <Eigen/Geometry>
 
 namespace yocs
 {

@@ -78,8 +78,8 @@ private:
 	bool getLocalGoal();
 	bool getLocalStatus();
 	//check quaternion valid or not:
-	unsigned int checkQuaternion(geometry_msgs::PoseStamped pose);
-	bool checkQuaternion(geometry_msgs::PoseStamped pose);
+	unsigned int checkQuaternion(const geometry_msgs::PoseStamped& pose);
+	bool checkQuaternionOnce(const geometry_msgs::PoseStamped& pose);
 private:
 	std::string odom_topic_;
 	std::mutex dyn_params_mutex_;
@@ -98,6 +98,7 @@ private:
 	tf::TransformListener* tf_;
 	costmap_2d::Costmap2DROS* costmap_ros_;
 	geometry_msgs::PoseStamped goal_;
+	geometry_msgs::PoseStamped last_valid_pose_;
 	std::string global_frame_;
 	geometry_msgs::PoseStamped final_goal_;
 	//relocation poses:

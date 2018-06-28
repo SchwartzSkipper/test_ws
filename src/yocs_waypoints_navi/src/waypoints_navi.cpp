@@ -642,8 +642,7 @@ void WaypointsGoalNode::spin()
               // std::string temp_frame_id;
               double polar_theta, polar_dist, temp_yaw;
               double cart_x, cart_y;
-              Eigen::Isometry3d TransformL2R, TransformLocal;
-              std::string coord_;
+              std::string coord_, local_frame_id_;
               // std_msgs::Float64 msg;
               // msg.data = atof(json_value["close_enough"].asString().c_str());
               if(json_value.isMember("coord")){
@@ -672,7 +671,12 @@ void WaypointsGoalNode::spin()
               local_pose_.pose.position.z = 0;
               local_pose_.pose.orientation = waypoints_it_->pose.orientation;
 
-              local_marker_sub_ = nh_.subscribe("triangle_pose", 1, &WaypointsGoalNode::scan_marker_sub, this);
+              local_frame_id_ = "triangle_pose";
+              if(json_value.isMember("frame_id"))
+              {
+                local_frame_id_ = json_value["frame_id"].asString();
+              }
+              local_marker_sub_ = nh_.subscribe(local_frame_id_, 1, &WaypointsGoalNode::scan_marker_sub, this);
               usleep(200000); // wait for nh_.subscribe to registration if publish latch is false
               local_pose_.header.frame_id = "base_footprint";
               local_pose_.header.stamp = ros::Time::now();

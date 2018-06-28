@@ -148,7 +148,7 @@ bool BZPlannerROS::setPlan(const std::vector<geometry_msgs::PoseStamped>& plan)
             {
                 if(getLocalGoal())
                 {
-                    ROS_ERROR("HA2");
+                    //ROS_ERROR("HA2");
                     goal_ = relocation_goal_;
                 }
             }
@@ -212,11 +212,11 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
         return false;
     }
 
-    if(!planner_util_.getLocalPlan(current_pose_, transformed_plan))
-    {
-        ROS_ERROR("Could not transform local plan");
-        return false;
-    }
+    // if(!planner_util_.getLocalPlan(current_pose_, transformed_plan)) //transform goal based on local plan
+    // {
+    //     ROS_ERROR("Could not transform local plan");
+    //     return false;
+    // }
 
     tf::poseStampedTFToMsg(current_pose_, pose);
 
@@ -242,7 +242,7 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
             if(relocation_frame_ == "base_footprint" && getLocalGoal())
             {
                 if(getLocalPose())
-                {   ROS_ERROR("HA3");
+                {   //ROS_ERROR("HA3");
                     goal_ = relocation_goal_;
                     global_pose = relocation_pose_;
                     pose_helper_.pose_gained_ = false;
@@ -267,17 +267,17 @@ bool BZPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
             ROS_ERROR("%s", ex.what());
             return false; //exit(1);
         }
-        if(!final_goal_lock_ && convert_global_)
-        {
-            if(!globalPlanConversion(goal_, transformed_plan, select)){
-                ROS_ERROR("Could not convert the global path into the goal used for calculating bezier curves");
-                return false;
-            }
-        }
-        else if(!convert_global_)
-        {
+        // if(!final_goal_lock_ && convert_global_)
+        // {
+        //     if(!globalPlanConversion(goal_, transformed_plan, select)){
+        //         ROS_ERROR("Could not convert the global path into the goal used for calculating bezier curves");
+        //         return false;
+        //     }
+        // }
+        // else if(!convert_global_)
+        // {
             goal_ = final_goal_;
-        }
+        //}
     }
     std::lock_guard<std::mutex> lk(dyn_params_mutex_);
     tf::Pose gpose,ppose;
@@ -665,7 +665,7 @@ bool BZPlannerROS::goalReachSum(int reach_level)
                 }
             }
             if(relocation_frame_ == "base_footprint")
-            {   ROS_ERROR("ha1");
+            {   //ROS_ERROR("ha1");
                 if(goalReachLocal()){
                     ROS_INFO("Goal reached in relocation mode");
                     return true;
@@ -696,10 +696,15 @@ bool BZPlannerROS::getLocalGoal(tf::Stamped<tf::Pose>& tf_goal)
     if(goal_helper_.getPoseStatus())
     {
         goal_helper_.getPose(relocation_goal_);
-        tf::poseStampedMsgToTF(relocation_goal_,tf_goal);
-        relocation_mode_ = true;
-        return true;
-        ROS_INFO("Received relocation goal, executing relocation mode now");
+        if(checkQuaternionOnce(relocation_goal_))
+        {
+            tf::poseStampedMsgToTF(relocation_goal_,tf_goal);
+            relocation_mode_ = true;
+            return true;
+            ROS_INFO("Received relocation goal, executing relocation mode now");
+        }
+        
+        return false;
     }
     else{
         return false;
@@ -738,9 +743,9 @@ bool BZPlannerROS::getLocalPose()
 
         pose_helper_.getPose(pose_in_);
         //invalid pose detection
-        if(checkQuaternion(pose_in_) >= 5)
+        if(checkQuaternion(pose_in_) >= 4)
         {   
-            ROS_ERROR("Can't get robot pose in the relocation frame");
+            ROS_ERROR("Received too many invalid poses, failured to update local pose ");
             return false;
         }
         else
@@ -763,8 +768,14 @@ bool BZPlannerROS::getLocalPose()
                 return true;
             }
 
-            if(relocation_frame_ == "base_footprint")
-            {   if(pose_in_.header.frame_id != "base_footprint")
+            if(relocation_frame_ == "base_footprint")   
+            {   
+                if(!checkQuaternionOnce(pose_in_))
+                {
+                    pose_in_ = last_valid_pose_;
+                    //ignore the initial errors.
+                }
+                if(pose_in_.header.frame_id != "base_footprint")
                 {
                     try
                     {
@@ -780,6 +791,7 @@ bool BZPlannerROS::getLocalPose()
                 else{
                     pose_out_ = pose_in_;
                 }
+                last_valid_pose_ = pose_out_;
                 tf::Pose pose;
                 tf::Quaternion trans_quad, inv_quad, origin_quad;
                 tf::Transform footprint2local_trans, temp_inv,origin_trans;
@@ -826,8 +838,8 @@ bool BZPlannerROS::getLocalStatus()
     }
 }
 
-unsigned int BZPlannerROS::checkQuaternion(geometry_msgs::PoseStamped pose)
-{
+unsigned int BZPlannerROS::checkQuaternion(const geometry_msgs::PoseStamped& pose)
+{   
     try
     {
         tf::assertQuaternionValid(pose.pose.orientation);
@@ -839,9 +851,10 @@ unsigned int BZPlannerROS::checkQuaternion(geometry_msgs::PoseStamped pose)
         return check_quad_num_;
     }
     check_quad_num_ = 0;
+    return check_quad_num_;
 }
 
-bool BZPlannerROS::checkQuaternion(geometry_msgs::PoseStamped pose)
+bool BZPlannerROS::checkQuaternionOnce(const geometry_msgs::PoseStamped& pose)
 {
     try
     {
