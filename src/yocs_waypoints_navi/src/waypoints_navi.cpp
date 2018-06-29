@@ -670,30 +670,17 @@ void WaypointsGoalNode::spin()
               }
               local_pose_.pose.position.z = 0;
               local_pose_.pose.orientation = waypoints_it_->pose.orientation;
-
-              local_frame_id_ = "triangle_pose";
+            
               if(json_value.isMember("frame_id"))
               {
                 local_frame_id_ = json_value["frame_id"].asString();
               }
-              local_marker_sub_ = nh_.subscribe(local_frame_id_, 1, &WaypointsGoalNode::scan_marker_sub, this);
-              usleep(200000); // wait for nh_.subscribe to registration if publish latch is false
               local_pose_.header.frame_id = "base_footprint";
               local_pose_.header.stamp = ros::Time::now();
               is_user_sub_ = false;
 
-              while (ros::ok() && !is_user_sub_)
-              {
-                  local_marker_pub_.publish(local_pose_);
-                  usleep(10000); // resend after 1s
-                  ros::spinOnce();
-              }
-              local_marker_sub_.shutdown();
-              if (state_ == IDLE)
-              {
-                  continue;
-              }
-        
+              local_marker_pub_.publish(local_pose_);
+       
               close_enough_ = 0.0;
               goal_timeout_ = atof(json_value["goal_timeout"].asString().c_str()) ? atof(json_value["goal_timeout"].asString().c_str()) : DBL_MAX;
               
@@ -706,9 +693,13 @@ void WaypointsGoalNode::spin()
               mb_goal.target_pose.pose.position.x = 0.0; 
               mb_goal.target_pose.pose.position.y = 0.0; 
               mb_goal.target_pose.pose.orientation.z = 0.0; 
-              mb_goal.target_pose.pose.orientation.w = 0.0; 
+              mb_goal.target_pose.pose.orientation.w = 1.0; 
               move_base_ac_.sendGoal(mb_goal);              
               state_ = ACTIVE;
+              if (state_ == IDLE)
+              {
+                  continue;
+              }
               // waypoints_it_++;
           }
 
