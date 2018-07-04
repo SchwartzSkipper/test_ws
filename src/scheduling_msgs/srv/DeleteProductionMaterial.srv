@@ -1,0 +1,10 @@
+# srv for innolux
+
+string machine
+string model
+---
+int32 feedback
+# 0: succeeded
+# 1: already exists
+string message
+# error messages

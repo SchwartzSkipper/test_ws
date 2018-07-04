@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(scheduling_msgs)
 
-find_package(catkin REQUIRED roscpp std_msgs message_generation geometry_msgs)
+find_package(catkin REQUIRED roscpp std_msgs message_generation geometry_msgs nav_msgs)
 
 ## Generate messages in the 'msg' folder
 add_message_files(
@@ -21,6 +21,14 @@ add_message_files(
   TaskList2.msg
   ServerStatus.msg
   RoadSet.msg
+  MapStream.msg
+  # innolux line I/O
+  ProductionMaterial.msg
+  ProductionMaterialList.msg
+  # innolux line P
+  TaskInxLineP.msg
+  TaskInxLinePList.msg
+  ShelvesStatus.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -41,6 +49,14 @@ FILES
     TaskQueryAndGainPath.srv
     SetPlannerPath.srv
     ClearPlannerPath.srv
+    RequestTask.srv
+    ReportNavigationControlStatus.srv
+    #innolux line I/O
+    AddProductionMaterial.srv
+    AddProductionPlan.srv
+    DeleteProductionMaterial.srv
+    DeleteProductionPlan.srv
+    SelectProductionMaterial.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -55,6 +71,7 @@ generate_messages(
   DEPENDENCIES
   std_msgs
   geometry_msgs # Or other packages containing msgs
+  nav_msgs
 )
 
 ################################################

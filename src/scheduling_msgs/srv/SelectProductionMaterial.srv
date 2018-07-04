@@ -1,0 +1,12 @@
+# srv for innolux
+
+string key
+# "line", "station", "machine", "model", "material_type" or "material_no"
+string value
+---
+int32 feedback
+# 0: succeed
+# 1: not found matched records
+# 2: key error
+string message
+ProductionMaterialList materials

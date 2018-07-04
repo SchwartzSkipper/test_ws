@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(punctual_command)
 
-include_directories(
-  "${PROJECT_SOURCE_DIR}/include"
-)
-
 find_package(catkin REQUIRED COMPONENTS roscpp dynamic_reconfigure)
 
 include_directories(
@@ -17,7 +13,7 @@ generate_dynamic_reconfigure_options(
 )
 
 
-catkin_package(INCLUDE_DIRS include
+catkin_package(INCLUDE_DIRS
     LIBRARIES punctual_command
     CATKIN_DEPENDS
         dynamic_reconfigure

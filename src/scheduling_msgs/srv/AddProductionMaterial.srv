@@ -1,0 +1,9 @@
+# srv for innolux
+
+ProductionMaterialList materials
+---
+int32 feedback
+# 0: succeeded
+# 1: already exists
+string message
+# error messages

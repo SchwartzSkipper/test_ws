@@ -1,0 +1,12 @@
+# srv for innolux
+
+string line
+string machine
+string model
+---
+int32 feedback
+# 0: succeeded
+# 1: production plan already exists
+# 2: production plan cannot be found in production material database
+string message
+# error messages

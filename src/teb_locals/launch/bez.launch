@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!-- 
   Simulate a differential drive robot with the teb_local_planner in stage:
   - stage
@@ -29,7 +30,7 @@
 		<param name="planner_patience" value="5.0" />
 		<param name="planner_is_navfn" value="true" />
 
-		<param name="base_local_planner" value="bz_local_planner/BZPlannerROS" />
+		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
 	</node>
 
 
@@ -37,6 +38,9 @@
 	<node name="map_server" pkg="map_server" type="map_server" args="$(find teb_locals)/maps/maze.yaml" output="screen">
 		<param name="frame_id" value="/map"/>
 	</node>
+    <node name="map_edit_server" pkg="map_server" type="map_server" args="$(find teb_locals)/maps/maze_traj.yaml" output="screen">
+        <remap from="map" to="map_edit"/>
+    </node>
 
 	<node pkg="amcl" type="amcl" name="amcl" output="screen">
 		<rosparam file="$(find teb_local_planner_tutorials)/cfg/amcl_params.yaml" command="load" />
@@ -49,6 +53,5 @@
 	  <!--  **************** Visualisation ****************  -->
 	  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find teb_locals)/cfg/rviz.rviz"/>
 
-	<node pkg="local_pose_talker" type="local_pose_talker_node" name="local_pose_talker" output="screen"/>
-
+<!-- 	<node pkg="local_pose_talker" type="local_pose_talker_node" name="local_pose_talker" output="screen"/> -->
 </launch>

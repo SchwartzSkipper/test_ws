@@ -1,0 +1,11 @@
+# srv for innolux
+
+string line
+string machine
+string model
+---
+int32 feedback
+# 0: succeeded
+# 1: production plan cannot be found in current plans
+string message
+# error messages
