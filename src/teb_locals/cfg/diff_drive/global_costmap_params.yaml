@@ -15,6 +15,13 @@ global_costmap:
     map_topic: /map_edit
   obstacle_layer:
     enable: false
+    obstacle_range: 3.0
+    raytrace_range: 4.0
+    inflation_radius: 0.2
+    track_unknown_space: true
+    combination_method: 1
+    observation_sources: laser_scan_sensor
+    laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true}
   inflation_layer:
     enabled:              true
     cost_scaling_factor:  10.0  # exponential rate at which the obstacle cost drops off (default: 10)
