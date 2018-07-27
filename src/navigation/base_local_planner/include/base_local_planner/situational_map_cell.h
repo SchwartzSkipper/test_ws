@@ -1,8 +1,7 @@
 /*********************************************************************
- *
  * Software License Agreement (BSD License)
  *
- *  Copyright (c) 2008, Willow Garage, Inc.
+ *  Copyright (c) 2018, HRG
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -15,7 +14,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
+ *   * Neither the name of the Willow Garage nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -31,65 +30,46 @@
  *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
- *
- * Author: TKruse
+ * Author: Honggang Gou
  *********************************************************************/
+#ifndef SITUATIONAL_MAP_CELL_H_
+#define SITUATIONAL_MAP_CELL_H_
 
-#ifndef TRAJECTORYCOSTFUNCTION_H_
-#define TRAJECTORYCOSTFUNCTION_H_
-
-#include <base_local_planner/trajectory.h>
-
+#include <base_local_planner/trajectory_inc.h>
+#include <costmap_2d/cost_values.h>
 namespace base_local_planner {
-
-/**
- * @class TrajectoryCostFunction
- * @brief Provides an interface for critics of trajectories
- * During each sampling run, a batch of many trajectories will be scored using such a cost function.
- * The prepare method is called before each batch run, and then for each
- * trajectory of the sampling set, score_trajectory may be called.
- */
-class TrajectoryCostFunction {
-public:
-
   /**
-   *
-   * General updating of context values if required.
-   * Subclasses may overwrite. Return false in case there is any error.
+   * @class MapCell
+   * @brief Stores path distance and goal distance information used for scoring trajectories
    */
-  virtual bool prepare() = 0;
+  class SituationalMapCell{
+    public:
+      /**
+       * @brief  Default constructor
+       */
+      SituationalMapCell();
 
-  /**
-   * return a score for trajectory traj
-   */
-  virtual double scoreTrajectory(Trajectory &traj) = 0;
+      /**
+       * @brief  Copy constructor
+       * @param smc The SituationalMapCell to be copied
+       */
+      SituationalMapCell(const SituationalMapCell& smc);
 
-  double getScale() {
-    return scale_;
-  }
+      unsigned char getCellCost()
+      {
+        return obstacle_cost_;
+      }
 
-  void setScale(double scale) {
-    scale_ = scale;
-  }
+      unsigned int cx, cy; ///< @brief Cell index in the grid map
 
-  std::string getType() {
-    return type_;
-  }
-
-  void setType(std::string temp_type) {
-    type_ = temp_type;
-  }
-
-  virtual ~TrajectoryCostFunction() {}
-
-protected:
-  TrajectoryCostFunction(double scale = 1.0): scale_(scale) {}
-
-private:
-  double scale_;
-  std::string type_;
+      enum dz_status
+      {
+        NORMAL,
+        CAUTIOUS,
+        UNKNOWN
+      }defined_zone_status;
+      unsigned char obstacle_cost_;
+  };
 };
 
-}
-
-#endif /* TRAJECTORYCOSTFUNCTION_H_ */
+#endif

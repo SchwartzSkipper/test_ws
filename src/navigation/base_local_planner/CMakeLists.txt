@@ -98,7 +98,8 @@ add_library(base_local_planner
 	src/simple_scored_sampling_planner.cpp
 	src/simple_trajectory_generator.cpp
 	src/trajectory.cpp
-	src/voxel_grid_model.cpp)
+	src/voxel_grid_model.cpp
+    src/situational_obstacle_cost_function.cpp)
 add_dependencies(base_local_planner base_local_planner_gencfg)
 add_dependencies(base_local_planner base_local_planner_gencpp)
 add_dependencies(base_local_planner nav_msgs_gencpp)

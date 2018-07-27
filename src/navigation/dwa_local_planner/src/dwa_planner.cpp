@@ -83,6 +83,13 @@ namespace dwa_local_planner {
     // obstacle costs can vary due to scaling footprint feature
     obstacle_costs_.setParams(config.max_trans_vel, config.max_scaling_factor, config.scaling_speed);
 
+    path_costs_.setType("path_costs");
+    goal_costs_.setType("goal_costs");
+    alignment_costs_.setType("alignment_costs");
+    obstacle_costs_.setType("obstacle_costs");
+    goal_front_costs_.setType("goal_front_costs");
+    oscillation_costs_.setType("oscillation_costs");
+
     int vx_samp, vy_samp, vth_samp;
     vx_samp = config.vx_samples;
     vy_samp = config.vy_samples;
