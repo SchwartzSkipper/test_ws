@@ -74,15 +74,14 @@ double SituationalObstacleCostFunction::scoreTrajectory(Trajectory &traj) {
   double cost = 0;
   double scale = getScalingFactor(traj, scaling_speed_, max_trans_vel_, max_scaling_factor_);
   double px, py, pth;
-  unsigned int traj_status;
   if (footprint_spec_.size() == 0) {
     // Bug, should never happen
     ROS_ERROR("Footprint spec is empty, maybe missing call to setFootprint?");
     return -9;
   }
 
-  traj_status = trajectoryClassifier(traj, global_costmap_, local_costmap_);
-  switch(traj_status){
+  traj_status_ = trajectoryClassifier(traj, global_costmap_, local_costmap_);
+  switch(traj_status_){
     case UNKNOWN_ZONE :{
       //TODO: distinguish unknown and normal ?
       return obfun_->scoreTrajectory(traj);
@@ -162,6 +161,10 @@ unsigned int SituationalObstacleCostFunction::trajectoryClassifier(Trajectory &t
       }
     }
   }
+}
+
+unsigned int SituationalObstacleCostFunction::getTrajStatus() {
+  return traj_status_;
 }
 
 void SituationalObstacleCostFunction::clearPointStatus(){

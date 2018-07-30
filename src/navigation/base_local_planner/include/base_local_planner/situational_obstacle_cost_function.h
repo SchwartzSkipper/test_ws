@@ -80,6 +80,7 @@ public:
   
   inline unsigned int getCellStatus(const double& x, const double& y, costmap_2d::Costmap2D* global_costmap, costmap_2d::Costmap2D* local_costmap);
   
+  unsigned int getTrajStatus();
   unsigned int trajectoryClassifier(Trajectory &traj, costmap_2d::Costmap2D* global_costmap, costmap_2d::Costmap2D* local_costmap);
 
   void clearPointStatus();
@@ -99,6 +100,7 @@ private:
   //footprint scaling with velocity;
   double max_scaling_factor_, scaling_speed_;
   boost::shared_ptr<base_local_planner::ObstacleCostFunction> obfun_;
+  unsigned int traj_status_;
 };
 
 } /* namespace base_local_planner */
