@@ -1,0 +1,7 @@
+<library path="lib/libbz_local_planner">
+  <class name="bz_local_planner/BZPlannerROS" type="bz_local_planner::BZPlannerROS" base_class_type="nav_core::BaseLocalPlanner">
+    <description>
+      A implementation of a bezier local planner
+    </description>
+  </class>
+</library>
